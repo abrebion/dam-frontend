@@ -18,10 +18,10 @@ export default function Login(props) {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const response = await api.post("/login", { email, password });
-      console.log(response);
-      if (response.data.status === "success") {
-        setCurrentUser(response.data.user);
+      const res = await api.post("/login", { email, password });
+      console.log(res);
+      if (res.data.status === "success") {
+        setCurrentUser(res.data.user);
         props.history.push("/dashboard");
       } else {
         setUserFeedback("Your credentials are invalid. Try again...");
@@ -40,14 +40,14 @@ export default function Login(props) {
           <form className="my-4" onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="email">Email address</label>
-              <input type="email" name="email" className="form-control" id="email" aria-describedby="emailHelp" value={email} onChange={e => setEmail(e.target.value)} />
+              <input type="email" name="email" className="form-control" id="email" required aria-describedby="emailHelp" value={email} onChange={e => setEmail(e.target.value)} />
               <small id="emailHelp" className="form-text text-muted">
                 A Suntory email address is mandatory.
               </small>
             </div>
             <div className="form-group">
               <label htmlFor="password">Password</label>
-              <input type="password" name="password" className="form-control" id="password" value={password} onChange={e => setPassword(e.target.value)} />
+              <input type="password" name="password" className="form-control" id="password" required value={password} onChange={e => setPassword(e.target.value)} />
             </div>
             <button type="submit" className="btn btn-primary">
               Login

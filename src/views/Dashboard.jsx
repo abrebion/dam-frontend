@@ -9,17 +9,14 @@ export default function Dasboard(props) {
   const userContext = useContext(UserContext);
   const { currentUser, setCurrentUser } = userContext;
   console.log("Current User:", currentUser);
-  const { isLoggedIn, setIsLoggedIn } = useAuth();
 
   const handleLogout = () => {
     api.post("/logout").finally(() => {
       console.log("You've been logged out");
-      // setIsLoggedIn(false);
       setCurrentUser(null);
       props.history.push("/login");
     });
   };
-  // console.log("Is logged in?", isLoggedIn);
 
   return (
     <div>
