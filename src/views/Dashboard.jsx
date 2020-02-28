@@ -1,28 +1,18 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
-import api from "../api/apiHandler";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useAuth } from "../authentication/useAuth";
-import UserContext from "../authentication/UserContext";
+import React, { useState, useContext } from "react";
+import Header from "../components/Header";
 
-export default function Dasboard(props) {
-  const userContext = useContext(UserContext);
-  const { currentUser, setCurrentUser } = userContext;
-  console.log("Current User:", currentUser);
-
-  const handleLogout = () => {
-    api.post("/logout").finally(() => {
-      console.log("You've been logged out");
-      setCurrentUser(null);
-      props.history.push("/login");
-    });
-  };
-
+export default function Dashboard({ toggleUploadModal }) {
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <FontAwesomeIcon icon="sync-alt" />
-      <button onClick={handleLogout}>Logout</button>
+    <div className="container-fluid">
+      <Header toggleUploadModal={toggleUploadModal} />
+      <div className="row">
+        <div className="col-2" style={{ backgroundColor: "white" }}>
+          <h4>Search</h4>
+        </div>
+        <div className="col-10" style={{ backgroundColor: "white" }}>
+          <h4>Asset List</h4>
+        </div>
+      </div>
     </div>
   );
 }

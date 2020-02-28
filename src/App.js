@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 // Authentication
 import { useAuth } from "./authentication/useAuth";
 import UserContext from "./authentication/UserContext";
@@ -12,13 +12,20 @@ import RequestAccess from "./views/RequestAccess";
 import ResetPassword from "./views/ResetPassword";
 import Register from "./views/Register";
 import Dashboard from "./views/Dashboard";
+import Collections from "./views/Collections";
+import AssetUploader from "./components/AssetUploader";
 
 export default function App() {
-  const { isLoggedIn, isLoading } = useAuth();
+  const { isLoading } = useAuth();
   const [currentUser, setCurrentUser] = useState({});
   const UserContextValue = {
     currentUser,
     setCurrentUser
+  };
+  const [showUploader, setUploaderVisibility] = useState(false);
+
+  const toggleUploadModal = e => {
+    return setUploaderVisibility(!showUploader);
   };
 
   return (
@@ -30,9 +37,11 @@ export default function App() {
           <Route exact path="/request-access" component={RequestAccess} />
           <Route exact path="/reset-password" component={ResetPassword} />
           <Route exact path="/first-connection" render={props => <ResetPassword {...props} firstConnection={true} />} />
-          <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+          <ProtectedRoute exact path="/dashboard" component={Dashboard} toggleUploadModal={toggleUploadModal} />
+          <ProtectedRoute exact path="/collections" component={Collections} toggleUploadModal={toggleUploadModal} />
         </Switch>
       )}
+      {showUploader && <AssetUploader toggleUploadModal={toggleUploadModal} />}
     </UserContext.Provider>
   );
 }

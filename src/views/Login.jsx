@@ -13,13 +13,13 @@ export default function Login(props) {
 
   useEffect(() => {
     if (currentUser) props.history.push("/dashboard");
-  }, [currentUser]);
+  });
 
   const handleSubmit = async e => {
     e.preventDefault();
     try {
       const res = await api.post("/login", { email, password });
-      console.log(res);
+      // console.log(res);
       if (res.data.status === "success") {
         setCurrentUser(res.data.user);
         props.history.push("/dashboard");
@@ -34,7 +34,7 @@ export default function Login(props) {
     <div className="container h-100">
       <div className="row justify-content-center align-items-center h-100">
         <div className="col-lg-6 border shadow p-5 bg-white rounded">
-          <Logo />
+          <Logo src="logo" />
           <h1 className="h5 text-center">Digital Asset Management</h1>
           <h2 className="h2 mt-4 text-center">Login</h2>
           <form className="my-4" onSubmit={handleSubmit}>

@@ -2,7 +2,7 @@
 @import "~bootstrap/scss/bootstrap.scss";
 
 body {
-    background: url('../images/background.jpg');
+    // background: url('../images/background.jpg');
     // background-size: cover;
 }
 
@@ -12,4 +12,20 @@ body {
 
 .logo {
     width: 100%;
+}
+
+.upload-modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload-modal {
+    width: 900px;
 }

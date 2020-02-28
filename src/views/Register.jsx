@@ -1,15 +1,15 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import UserContext from "../authentication/UserContext";
 import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
 
 export default function Register(props) {
   const userContext = useContext(UserContext);
-  const { currentUser, setCurrentUser } = userContext;
+  const { currentUser } = userContext;
 
   useEffect(() => {
     if (currentUser) props.history.push("/dashboard");
-  }, [currentUser]);
+  });
 
   return (
     <div className="container h-100">

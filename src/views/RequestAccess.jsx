@@ -6,13 +6,13 @@ import Logo from "../components/Logo";
 
 export default function RequestAccess(props) {
   const userContext = useContext(UserContext);
-  const { currentUser, setCurrentUser } = userContext;
+  const { currentUser } = userContext;
   const [{ firstname, lastname, email }, setUserRequest] = useState({ firstname: "Anthony", lastname: "Brebion", email: "anthony.brebion@suntory.com" });
   const [userFeedback, setUserFeedback] = useState("");
 
   useEffect(() => {
     if (currentUser) props.history.push("/dashboard");
-  }, [currentUser]);
+  });
 
   const handleInput = e => {
     setUserRequest({ firstname, lastname, email, [e.target.name]: e.target.value });
@@ -21,10 +21,8 @@ export default function RequestAccess(props) {
   const handleSubmit = async e => {
     e.preventDefault();
     setUserFeedback(`${firstname}, you're request is on its way... You'll soon receive an email to finalize your account setup.`);
-    console.log({ firstname, lastname, email });
     try {
-      const accessRequest = await api.post("/users/request-access", { firstname, lastname, email });
-      console.log(accessRequest.data.message);
+      await api.post("/users/request-access", { firstname, lastname, email });
     } catch (error) {
       console.error(error);
     }
@@ -39,8 +37,7 @@ export default function RequestAccess(props) {
           <h2 className="h2 my-4 text-center">Request Access</h2>
           <p>
             <small className="d-inline-block">
-              After submitting this form, an administrator will be notified of your request. Once your account has been validated, you'll receive an email to finalize your account
-              setup.
+              After submitting this form, an administrator will be notified. Once your account has been validated, you'll receive an email to finalize your account setup.
             </small>
           </p>
           <form className="my-4" onSubmit={handleSubmit}>

@@ -6,7 +6,7 @@ import Logo from "../components/Logo";
 
 export default function ResetPassword(props) {
   const userContext = useContext(UserContext);
-  const { currentUser, setCurrentUser } = userContext;
+  const { currentUser } = userContext;
   const [{ email, currentPassword, newPassword, newPasswordConfirmation }, setChangePassword] = useState({
     email: "abrebion@gmail.com",
     currentPassword: "12345",
@@ -17,7 +17,7 @@ export default function ResetPassword(props) {
 
   useEffect(() => {
     if (currentUser) props.history.push("/dashboard");
-  }, [currentUser]);
+  });
 
   const handleInput = e => {
     setChangePassword({ email, currentPassword, newPassword, newPasswordConfirmation, [e.target.name]: e.target.value });
