@@ -100,3 +100,57 @@ body {
     align-items: center;
     height: 200px;
 }
+
+.asset-toolbar {
+    border: 1px solid rgba($black, .125);
+    border-radius: 0.25rem;
+    font-size: 80%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    ul {
+        display: flex;
+        list-style: none;
+        padding: 10px 10px;
+        margin-bottom: 0;
+
+        @media (min-width: 576px) {
+            margin-right: 1rem;
+        }
+
+
+        @media (min-width: 1200px) {
+            border-right: 1px solid rgba($black, .125);
+        }
+
+        >li {
+            cursor: pointer;
+
+            @media (min-width: 576px) {
+                margin-right: 1rem;
+            }
+
+            &:hover {
+                color: $primary;
+            }
+
+        }
+
+    }
+
+    ul:last-child {
+        margin-right: 0;
+        border-right: none;
+
+        li:last-child {
+
+            margin-right: 0
+        }
+    }
+
+    span {
+        margin-left: .5rem;
+        margin-right: .5rem;
+    }
+}

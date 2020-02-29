@@ -20,7 +20,7 @@ export default function AssetCard({ img, name, ean, extension, bytes, width, hei
             {toggleSelect === false ? (
               <FontAwesomeIcon icon={["far", "square"]} onClick={handleToggleSelect} />
             ) : (
-              <FontAwesomeIcon icon={["far", "check-square"]} onClick={handleToggleSelect} className="card-select-on" />
+              <FontAwesomeIcon icon={["fa", "check-square"]} onClick={handleToggleSelect} className="card-select-on" />
             )}
           </div>
           <div className="card-menu-btn">

@@ -14,7 +14,9 @@ import {
   faTag,
   faTrashAlt,
   faUpload,
-  faUser
+  faUser,
+  faCheckCircle,
+  faCheckSquare
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faCheckSquare as faRegularCheckSquare,
@@ -27,6 +29,7 @@ import {
 library.add(
   faClipboardCheck,
   faDownload,
+  faCheckSquare,
   faEdit,
   faEllipsisV,
   faExternalLinkAlt,
@@ -45,5 +48,6 @@ library.add(
   faTag,
   faTrashAlt,
   faUpload,
-  faUser
+  faUser,
+  faCheckCircle
 );

@@ -27,7 +27,7 @@ export default function AssetCardMenu({ handleToggleEditMenu }) {
   };
 
   return (
-    <div className={"card-menu " + menuClass} ref={menu}>
+    <div className={"card-menu text-muted " + menuClass} ref={menu}>
       <span>
         <FontAwesomeIcon icon={["far", "eye"]} />
         Quick View
