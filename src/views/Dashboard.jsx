@@ -1,5 +1,6 @@
-import React, { useState, useContext } from "react";
+import React from "react";
 import Header from "../components/Header";
+import AssetList from "../components/AssetList";
 
 export default function Dashboard({ toggleUploadModal }) {
   return (
@@ -11,6 +12,7 @@ export default function Dashboard({ toggleUploadModal }) {
         </div>
         <div className="col-10" style={{ backgroundColor: "white" }}>
           <h4>Asset List</h4>
+          <AssetList />
         </div>
       </div>
     </div>

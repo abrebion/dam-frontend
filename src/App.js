@@ -5,7 +5,7 @@ import { useAuth } from "./authentication/useAuth";
 import UserContext from "./authentication/UserContext";
 import { ProtectedRoute } from "./authentication/ProtectedRoute";
 // Fontawesome Library
-import fontAwesomeLibrary from "./fontAwesomeLibrary";
+import "./helpers/fontAwesomeLibrary";
 // Views
 import Login from "./views/Login";
 import RequestAccess from "./views/RequestAccess";
@@ -13,7 +13,7 @@ import ResetPassword from "./views/ResetPassword";
 import Register from "./views/Register";
 import Dashboard from "./views/Dashboard";
 import Collections from "./views/Collections";
-import AssetUploader from "./components/AssetUploader";
+import NewAssetModal from "./components/NewAssetModal";
 
 export default function App() {
   const { isLoading } = useAuth();
@@ -41,7 +41,7 @@ export default function App() {
           <ProtectedRoute exact path="/collections" component={Collections} toggleUploadModal={toggleUploadModal} />
         </Switch>
       )}
-      {showUploader && <AssetUploader toggleUploadModal={toggleUploadModal} />}
+      {showUploader && <NewAssetModal toggleUploadModal={toggleUploadModal} />}
     </UserContext.Provider>
   );
 }

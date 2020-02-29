@@ -9,6 +9,7 @@ export default withRouter(function LoginStatus(props) {
   const { currentUser, setCurrentUser } = userContext;
 
   const handleLogout = e => {
+    e.preventDefault();
     api.post("/logout").finally(() => {
       console.log("You've been logged out");
       setCurrentUser(null);
@@ -23,7 +24,7 @@ export default withRouter(function LoginStatus(props) {
         <span className="mx-2">
           Logged in as {currentUser.firstname} {currentUser.lastname} &nbsp;&nbsp;|
         </span>
-        <a href="#" onClick={handleLogout}>
+        <a href="/" onClick={handleLogout}>
           Logout
         </a>
       </small>

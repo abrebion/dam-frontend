@@ -1,11 +1,7 @@
-import React, { useContext } from "react";
-import UserContext from "../authentication/UserContext";
+import React from "react";
 import Header from "../components/Header";
 
 export default function Collections({ toggleUploadModal }) {
-  const userContext = useContext(UserContext);
-  const { currentUser, setCurrentUser } = userContext;
-
   return (
     <div className="container-fluid">
       <Header toggleUploadModal={toggleUploadModal} />

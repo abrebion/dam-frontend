@@ -29,3 +29,74 @@ body {
 .upload-modal {
     width: 900px;
 }
+
+.card {
+    cursor: pointer;
+    transition: border-color .25s ease-in;
+
+    &:hover {
+        border-color: $primary;
+    }
+}
+
+.card-select-btn {
+    position: absolute;
+    left: 0;
+    margin-left: 6px;
+    color: $gray-400;
+}
+
+.card-select-on {
+    color: $primary;
+}
+
+.card-menu-btn {
+    position: absolute;
+    right: 0;
+    margin-right: 6px;
+    color: $gray-400;
+
+    &:hover {
+        color: $primary;
+    }
+}
+
+.card-menu {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 0.25rem;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+    font-size: .8rem;
+    position: absolute;
+    z-index: 100;
+    width: max-content;
+    top: 25px;
+    left: calc(100% - 25px);
+
+    >span {
+        margin-bottom: .5rem;
+        cursor: pointer;
+
+        &:hover {
+            color: $primary;
+        }
+
+        >svg {
+            margin-right: .5rem;
+        }
+    }
+}
+
+.card-menu.offset {
+    left: inherit;
+    right: 25px;
+}
+
+.card-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}

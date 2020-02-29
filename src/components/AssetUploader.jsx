@@ -41,27 +41,32 @@ const Container = styled.div`
   }
 `;
 
-function Dropzone(props) {
+export default function AssetUploader({ toggleSaveButton, toggleUploadModal }) {
   const [asset, setAsset] = useState({});
 
-  const onDrop = useCallback(acceptedFiles => {
-    // Upload file to Cloudinary using XHR and a direct call to the Cloudinary API
-    const uploaders = acceptedFiles.map(file => {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET);
-      formData.append("api_key", process.env.REACT_APP_CLOUDINARY_KEY);
-      formData.append("timestamp", Date.now());
-      return axios
-        .post(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`, formData, {
-          headers: { "X-Requested-With": "XMLHttpRequest" }
-        })
-        .then(response => {
-          setAsset({ ...response.data });
-        });
-    });
-    axios.all(uploaders).then(() => {});
-  }, []);
+  const onDrop = useCallback(
+    acceptedFiles => {
+      // Upload file to Cloudinary using XHR and a direct call to the Cloudinary API
+      const uploaders = acceptedFiles.map(file => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET);
+        formData.append("api_key", process.env.REACT_APP_CLOUDINARY_KEY);
+        formData.append("timestamp", Date.now());
+        return axios
+          .post(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`, formData, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+          })
+          .then(response => {
+            setAsset({ ...response.data });
+          });
+      });
+      axios.all(uploaders).then(() => {
+        toggleSaveButton();
+      });
+    },
+    [toggleSaveButton]
+  );
 
   const { getRootProps, getInputProps, acceptedFiles, isDragActive, isDragAccept, isDragReject } = useDropzone({ onDrop, multiple: false, accept: "image/*" });
 
@@ -74,39 +79,7 @@ function Dropzone(props) {
           <p className="mt-3">Drag 'n' drop a file here, or click to select one</p>
         </Container>
       )}
-      {acceptedFiles.length > 0 && <AssetMetadata cloudinaryData={asset} />}
-    </div>
-  );
-}
-
-export default function AssetUploader({ toggleUploadModal }) {
-  return (
-    <div className="upload-modal-container">
-      <div className="upload-modal" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog modal-lg" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">
-                Upload Asset
-              </h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={toggleUploadModal}>
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <Dropzone />
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={toggleUploadModal}>
-                Cancel
-              </button>
-              <button type="button" className="btn btn-primary">
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      {acceptedFiles.length > 0 && <AssetMetadata cloudinaryData={asset} toggleUploadModal={toggleUploadModal} />}
     </div>
   );
 }

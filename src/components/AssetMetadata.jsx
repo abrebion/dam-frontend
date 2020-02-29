@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../api/apiHandler";
+import formatBytes from "../helpers/formatBytes";
 
-export default function AssetMetadata({ cloudinaryData }) {
+export default function AssetMetadata({ cloudinaryData, toggleUploadModal }) {
   const [assetMetadata, setAssetMetadata] = useState({
-    cloudinary_public_id: "",
-    url_original: "",
     name: "Schweppes Agrumes 1.5l",
     type: "Product Image",
     meta_ean13: "1234567890123",
@@ -15,11 +14,19 @@ export default function AssetMetadata({ cloudinaryData }) {
     meta_capacity: "1.5l",
     meta_format: "Standard",
     meta_tags: []
-    // meta_width: "1920",
-    // meta_height: "1080",
-    // meta_extension: "png",
-    // meta_bytes: "3000000"
   });
+
+  useEffect(() => {
+    setAssetMetadata({
+      ...assetMetadata,
+      public_id: cloudinaryData.public_id,
+      secure_url: cloudinaryData.secure_url,
+      meta_file_width: cloudinaryData.width,
+      meta_file_height: cloudinaryData.height,
+      meta_file_extension: cloudinaryData.format,
+      meta_file_bytes: cloudinaryData.bytes
+    });
+  }, [cloudinaryData]);
 
   const handleInput = e => {
     setAssetMetadata({ ...assetMetadata, [e.target.name]: e.target.value });
@@ -28,25 +35,17 @@ export default function AssetMetadata({ cloudinaryData }) {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const insertedAsset = await api.post("/assets", assetMetadata);
-      console.log(insertedAsset);
+      await api.post("/assets", assetMetadata);
+      toggleUploadModal();
     } catch (error) {
       console.error(error);
     }
   };
 
-  function formatBytes(a, b) {
-    if (0 == a) return "0 Bytes";
-    var c = 1024,
-      d = b || 2,
-      e = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
-      f = Math.floor(Math.log(a) / Math.log(c));
-    return parseFloat((a / Math.pow(c, f)).toFixed(d)) + " " + e[f];
-  }
-  console.log("Cloudinary Props >>>>>", cloudinaryData);
+  // console.log("Cloudinary Props >>>>>", cloudinaryData);
 
   return (
-    <form onChange={handleInput} onSubmit={handleSubmit}>
+    <form onChange={handleInput} onSubmit={handleSubmit} id="new-asset-metadata">
       <div className="row">
         <div className="col-4 d-flex flex-column justify-content-center align-items-center">
           {cloudinaryData.bytes && (
@@ -182,59 +181,7 @@ export default function AssetMetadata({ cloudinaryData }) {
               <input type="text" name="meta_tags" className="form-control form-control-sm" id="tags" value={assetMetadata.meta_tags} />
             </div>
           </div>
-          <fieldset>
-            <input type="hidden" name="cloudinary_public_id" defaultValue={cloudinaryData.public_id} />
-            <input type="hidden" name="url_original" defaultValue={cloudinaryData.secure_url} />
-            <input type="hidden" name="meta_width" defaultValue={cloudinaryData.width} />
-            <input type="hidden" name="meta_height" defaultValue={cloudinaryData.height} />
-            <input type="hidden" name="meta_extension" defaultValue={cloudinaryData.format} />
-            <input type="hidden" name="meta_bytes" defaultValue={cloudinaryData.bytes} />
-          </fieldset>
         </div>
-        {/* <div className="col-3">
-          <fieldset disabled>
-            <div className="form-group row">
-              <label className="col-sm-6 col-form-label col-form-label-sm text-nowrap">
-                <small>File Width</small>
-              </label>
-              <div className="col-sm-6">
-                <label className="col-sm-6 col-form-label col-form-label-sm text-nowrap">
-                  <small className="text-muted">{cloudinaryData.width}</small>
-                </label>
-              </div>
-            </div>
-            <div className="form-group row">
-              <label htmlFor="height" className="col-sm-6 col-form-label col-form-label-sm text-nowrap">
-                <small>File Height</small>
-              </label>
-              <div className="col-sm-6">
-                <label className="col-sm-6 col-form-label col-form-label-sm text-nowrap">
-                  <small className="text-muted">{cloudinaryData.height}</small>
-                </label>
-              </div>
-            </div>
-            <div className="form-group row">
-              <label htmlFor="extension" className="col-sm-6 col-form-label col-form-label-sm text-nowrap">
-                <small>File Extension</small>
-              </label>
-              <div className="col-sm-6">
-                <label className="col-sm-6 col-form-label col-form-label-sm text-nowrap">
-                  <small className="text-muted">{cloudinaryData.format}</small>
-                </label>
-              </div>
-            </div>
-            <div className="form-group row">
-              <label htmlFor="bytes" className="col-sm-6 col-form-label col-form-label-sm text-nowrap">
-                <small>File Bytes</small>
-              </label>
-              <div className="col-sm-6">
-                <label className="col-sm-6 col-form-label col-form-label-sm text-nowrap">
-                  <small className="text-muted">{cloudinaryData.bytes}</small>
-                </label>
-              </div>
-            </div>
-          </fieldset>
-        </div> */}
       </div>
     </form>
   );
