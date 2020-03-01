@@ -31,7 +31,7 @@ body {
 }
 
 .card {
-    cursor: pointer;
+    // cursor: pointer;
     transition: border-color .25s ease-in;
 
     &:hover {
@@ -49,6 +49,7 @@ body {
     left: 0;
     margin-left: 6px;
     color: $gray-400;
+    cursor: pointer;
 }
 
 .card-select-on {
@@ -60,6 +61,7 @@ body {
     right: 0;
     margin-right: 6px;
     color: $gray-400;
+    cursor: pointer;
 
     &:hover {
         color: $primary;
@@ -169,6 +171,7 @@ body {
     width: 33vw;
     height: calc(100vh - 150px);
     background-color: $white;
+    border-radius: .25rem 0 0 .25rem;
     box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
     overflow-y: scroll;
     animation: .25s ease-in-out slidein;
@@ -195,6 +198,21 @@ body {
         img {
             width: auto;
             height: 100%;
+        }
+    }
+
+    .asset-panel-upload {
+
+        >div>div {
+            height: 25vh;
+        }
+
+        .upload-text {
+            font-size: 80%;
+        }
+
+        svg {
+            width: 2.5rem;
         }
     }
 

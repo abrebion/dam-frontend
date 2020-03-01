@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import UserContext from "../authentication/UserContext";
 
 export default function AssetToolbar({ userSelection, selectAll, clearAll }) {
+  const userContext = useContext(UserContext);
+  const { currentUser } = userContext;
   return (
     <div className="asset-toolbar mb-4 text-muted">
       <ul>
@@ -32,16 +35,18 @@ export default function AssetToolbar({ userSelection, selectAll, clearAll }) {
           <span>Add to Collection</span>
         </li>
       </ul>
-      <ul>
-        <li>
-          <FontAwesomeIcon icon="edit" />
-          <span>Bulk Edit</span>
-        </li>
-        <li>
-          <FontAwesomeIcon icon="trash-alt" />
-          <span>Delete</span>
-        </li>
-      </ul>
+      {currentUser && currentUser.role !== "user" && (
+        <ul>
+          <li>
+            <FontAwesomeIcon icon="edit" />
+            <span>Bulk Edit</span>
+          </li>
+          <li>
+            <FontAwesomeIcon icon="trash-alt" />
+            <span>Delete</span>
+          </li>
+        </ul>
+      )}
     </div>
   );
 }

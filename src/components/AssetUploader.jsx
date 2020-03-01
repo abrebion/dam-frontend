@@ -36,8 +36,8 @@ const Container = styled.div`
   transition: all 0.24s ease-in-out;
   cursor: pointer;
   &:hover {
-    color: #4a903c;
-    border-color: #4a903c};
+    color: #007696;
+    border-color: #007696};
   }
 `;
 
@@ -76,7 +76,7 @@ export default function AssetUploader({ toggleSaveButton, toggleUploadModal }) {
         <Container {...getRootProps({ isDragActive, isDragAccept, isDragReject })}>
           <input {...getInputProps()} />
           <FontAwesomeIcon icon="upload" size="3x" />
-          <p className="mt-3">Drag 'n' drop a file here, or click to select one</p>
+          <p className="mt-3 upload-text">Drag 'n' drop a file here, or click to select one</p>
         </Container>
       )}
       {acceptedFiles.length > 0 && <AssetMetadata cloudinaryData={asset} toggleUploadModal={toggleUploadModal} />}

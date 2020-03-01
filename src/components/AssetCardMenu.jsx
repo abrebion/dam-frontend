@@ -1,11 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useWindowDimensions } from "../helpers/useWindowDimensions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import UserContext from "../authentication/UserContext";
 
 export default function AssetCardMenu({ asset, handleToggleEditMenu, handleTogglePanel }) {
   const menu = useRef(null);
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
   const [menuClass, setMenuClass] = useState("");
+  const userContext = useContext(UserContext);
+  const { currentUser } = userContext;
 
   useEffect(() => {
     if (menu.current.getBoundingClientRect().right > windowWidth) {
@@ -15,6 +18,7 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
     document.addEventListener("mousedown", handleClick, false);
     return () => {
       document.removeEventListener("mousedown", handleClick, false);
+      handleToggleEditMenu(asset);
     };
   });
 
@@ -23,19 +27,22 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
       return;
     }
     handleToggleEditMenu(asset);
-    // document.removeEventListener("mousedown", handleClick, false);
   };
 
   return (
     <div className={"card-menu text-muted " + menuClass} ref={menu}>
-      <span onClick={() => handleTogglePanel(asset)}>
-        <FontAwesomeIcon icon={["far", "eye"]} />
-        Quick View
-      </span>
-      <span onClick={() => handleTogglePanel(asset)}>
-        <FontAwesomeIcon icon="edit" />
-        Edit
-      </span>
+      {currentUser.role !== "user" ? (
+        <span onClick={() => handleTogglePanel(asset)}>
+          <FontAwesomeIcon icon="edit" />
+          Edit
+        </span>
+      ) : (
+        <span onClick={() => handleTogglePanel(asset)}>
+          <FontAwesomeIcon icon={["far", "eye"]} />
+          Quick View
+        </span>
+      )}
+
       <span>
         <FontAwesomeIcon icon="download" />
         Download
@@ -48,10 +55,12 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
         <FontAwesomeIcon icon="folder-plus" />
         Add to Collection
       </span>
-      <span>
-        <FontAwesomeIcon icon="trash-alt" />
-        Delete
-      </span>
+      {currentUser.role !== "user" && (
+        <span>
+          <FontAwesomeIcon icon="trash-alt" />
+          Delete
+        </span>
+      )}
     </div>
   );
 }

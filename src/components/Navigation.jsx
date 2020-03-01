@@ -9,17 +9,17 @@ export default function Navigation({ toggleUploadModal }) {
   return (
     <div>
       <Link to="/dashboard">
-        <button type="button" className="btn btn-outline-primary">
+        <button type="button" className="btn btn-outline-primary btn-sm">
           Search Assets
         </button>
       </Link>
       <Link to="/collections">
-        <button type="button" className="btn btn-outline-primary ml-2">
+        <button type="button" className="btn btn-outline-primary btn-sm ml-2">
           My Collections
         </button>
       </Link>
       {currentUser.role !== "user" && (
-        <button type="button" className="btn btn-primary ml-2" onClick={toggleUploadModal}>
+        <button type="button" className="btn btn-primary btn-sm ml-2" onClick={toggleUploadModal}>
           Upload Asset
         </button>
       )}

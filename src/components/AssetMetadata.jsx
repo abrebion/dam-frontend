@@ -49,10 +49,15 @@ export default function AssetMetadata({ cloudinaryData, toggleUploadModal }) {
       <div className="row">
         <div className="col-4 d-flex flex-column justify-content-center align-items-center">
           {cloudinaryData.bytes && (
-            <div>
+            <div className="small text-muted">
               <img src={cloudinaryData.secure_url} alt="" className="img-fluid" />
               <small className="d-block">
-                File details:<br></br>.{cloudinaryData.format}, {cloudinaryData.width}x{cloudinaryData.height} pixels, {formatBytes(cloudinaryData.bytes)}
+                File details: .{cloudinaryData.format}, {cloudinaryData.width}x{cloudinaryData.height} pixels, {formatBytes(cloudinaryData.bytes)}
+              </small>
+              <small className="d-block">
+                Fill in additional data to make it searchable.
+                <br />
+                Don't worry, you'll be able to edit this later as well.
               </small>
             </div>
           )}
