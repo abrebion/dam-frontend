@@ -51,7 +51,7 @@ export default function Dashboard({ toggleUploadModal }) {
         </div>
         <div className="col-10" style={{ backgroundColor: "white" }}>
           <AssetToolbar userSelection={userSelection} selectAll={selectAll} clearAll={clearAll} />
-          <AssetList data={searchResults} userSelection={userSelection} updateUserSelection={updateUserSelection} />
+          <AssetList assets={searchResults} userSelection={userSelection} updateUserSelection={updateUserSelection} />
         </div>
       </div>
     </div>

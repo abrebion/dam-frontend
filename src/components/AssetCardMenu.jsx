@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useWindowDimensions } from "../helpers/useWindowDimensions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function AssetCardMenu({ handleToggleEditMenu, handleTogglePanel }) {
+export default function AssetCardMenu({ asset, handleToggleEditMenu, handleTogglePanel }) {
   const menu = useRef(null);
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
   const [menuClass, setMenuClass] = useState("");
@@ -22,17 +22,17 @@ export default function AssetCardMenu({ handleToggleEditMenu, handleTogglePanel 
     if (menu.current.contains(e.target)) {
       return;
     }
-    handleToggleEditMenu();
+    handleToggleEditMenu(asset);
     // document.removeEventListener("mousedown", handleClick, false);
   };
 
   return (
     <div className={"card-menu text-muted " + menuClass} ref={menu}>
-      <span onClick={handleTogglePanel}>
+      <span onClick={() => handleTogglePanel(asset)}>
         <FontAwesomeIcon icon={["far", "eye"]} />
         Quick View
       </span>
-      <span onClick={handleTogglePanel}>
+      <span onClick={() => handleTogglePanel(asset)}>
         <FontAwesomeIcon icon="edit" />
         Edit
       </span>

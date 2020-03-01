@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function AssetPanel({ handleTogglePanel }) {
+export default function AssetPanel({ asset, handleTogglePanel }) {
   const [assetMetadata, setAssetMetadata] = useState({
-    name: "Schweppes Agrumes 1.5l",
-    type: "Product Image",
-    meta_ean13: "1234567890123",
-    meta_brand: "Schweppes",
-    meta_recipe: "Schweppes Fruit",
-    meta_flavour: "Schweppes Agrumes",
-    meta_packaging: "PET",
-    meta_capacity: "1.5l",
-    meta_format: "Standard",
+    name: asset.name,
+    secure_url: asset.secure_url,
+    type: asset.type,
+    meta_ean13: asset.meta_ean13,
+    meta_brand: asset.meta_brand,
+    meta_recipe: asset.meta_recipe,
+    meta_flavour: asset.meta_flavour,
+    meta_packaging: asset.meta_packaging,
+    meta_capacity: asset.meta_capacity,
+    meta_format: asset.meta_format,
     meta_tags: []
   });
 
@@ -33,7 +34,7 @@ export default function AssetPanel({ handleTogglePanel }) {
     <div className="asset-panel">
       <FontAwesomeIcon icon={["fas", "times"]} className="asset-panel-close" onClick={handleTogglePanel} />
       <div className="asset-panel-preview">
-        <img src="https://res.cloudinary.com/dkx479spl/image/upload/v1582663942/dam/default/default_v2_preview.png" alt="" />
+        <img src={assetMetadata.secure_url} alt="" />
       </div>
       <div className="asset-panel-actions">
         <FontAwesomeIcon icon="upload" className="action" title="Replace asset with a new file" />
