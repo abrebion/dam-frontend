@@ -1,21 +1,21 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function AssetToolbar() {
+export default function AssetToolbar({ userSelection, selectAll, clearAll }) {
   return (
     <div className="asset-toolbar mb-4 text-muted">
       <ul>
-        <li>
+        <li onClick={selectAll}>
           <FontAwesomeIcon icon={["far", "plus-square"]} />
           <span>Select All</span>
         </li>
-        <li>
+        <li onClick={clearAll}>
           <FontAwesomeIcon icon={["far", "minus-square"]} />
           <span>Clear Selection</span>
         </li>
         <li>
           <FontAwesomeIcon icon="check-circle" />
-          <span>6 Selected</span>
+          <span>{userSelection.length} Selected</span>
         </li>
       </ul>
       <ul className="flex-xl-fill justify-content-xl-end">

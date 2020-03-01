@@ -1,24 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import AssetCard from "./AssetCard";
+import AssetPanel from "../components/AssetPanel";
 
-export default function AssetList() {
-  const list = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+export default function AssetList({ data, userSelection, updateUserSelection }) {
+  console.log("User Selection", userSelection);
+  const isSelected = asset => !!userSelection.filter(el => el._id === asset._id).length;
+  const [togglePanel, setTogglePanel] = useState(false);
+
+  const handleTogglePanel = () => {
+    setTogglePanel(!togglePanel);
+  };
 
   return (
-    <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-5">
-      {list.map((asset, i) => (
-        <AssetCard
-          key={i}
-          img="https://res.cloudinary.com/dkx479spl/image/upload/v1582663942/dam/default/default_v2_preview.png"
-          name="Oasis O'Verger Parfum Fraise-Framboise 6x33cl"
-          type="Product"
-          extension="png"
-          bytes={5678900}
-          width="1500"
-          height="1500"
-          ean="1234567890123"
-        />
-      ))}
+    <div className="position-relative">
+      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-5">
+        {data.map((asset, i) => (
+          <AssetCard key={i} data={asset} isSelected={isSelected(asset)} updateUserSelection={updateUserSelection} handleTogglePanel={handleTogglePanel} />
+        ))}
+      </div>
+      {togglePanel && <AssetPanel activeCard={0} handleTogglePanel={handleTogglePanel} />}
     </div>
   );
 }

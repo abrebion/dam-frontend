@@ -16,7 +16,8 @@ import {
   faUpload,
   faUser,
   faCheckCircle,
-  faCheckSquare
+  faCheckSquare,
+  faTimes
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faCheckSquare as faRegularCheckSquare,
@@ -24,7 +25,8 @@ import {
   faFileArchive as faRegularFileArchive,
   faMinusSquare as faRegularMinusSquare,
   faPlusSquare as faRegularPlusSquare,
-  faSquare as faRegularSquare
+  faSquare as faRegularSquare,
+  faWindowClose as faRegularWindowClose
 } from "@fortawesome/free-regular-svg-icons";
 library.add(
   faClipboardCheck,
@@ -49,5 +51,7 @@ library.add(
   faTrashAlt,
   faUpload,
   faUser,
-  faCheckCircle
+  faCheckCircle,
+  faRegularWindowClose,
+  faTimes
 );

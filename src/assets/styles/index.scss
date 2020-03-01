@@ -37,6 +37,11 @@ body {
     &:hover {
         border-color: $primary;
     }
+
+    .card-image img {
+        height: 100%;
+        width: auto;
+    }
 }
 
 .card-select-btn {
@@ -152,5 +157,74 @@ body {
     span {
         margin-left: .5rem;
         margin-right: .5rem;
+    }
+}
+
+.asset-panel {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: -1rem;
+    top: 0;
+    width: 33vw;
+    height: calc(100vh - 150px);
+    background-color: $white;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+    overflow-y: scroll;
+    animation: .25s ease-in-out slidein;
+
+    .asset-panel-close {
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: .5rem;
+        cursor: pointer;
+        color: rgba($black, .25);
+
+        &:hover {
+            color: $primary;
+        }
+    }
+
+    .asset-panel-preview {
+        display: flex;
+        justify-content: center;
+        height: 25vh;
+        background-color: lightgrey;
+
+        img {
+            width: auto;
+            height: 100%;
+        }
+    }
+
+    .asset-panel-actions {
+        display: flex;
+        justify-content: flex-end;
+        padding: 1rem 2rem 0;
+
+        .action {
+            margin-left: 1rem;
+            color: rgba($black, .25);
+            cursor: pointer;
+
+            &:hover {
+                color: $primary;
+            }
+        }
+    }
+
+    form {
+        padding: 2rem;
+    }
+}
+
+@keyframes slidein {
+    from {
+        right: -100rem;
+    }
+
+    to {
+        right: -1rem;
     }
 }

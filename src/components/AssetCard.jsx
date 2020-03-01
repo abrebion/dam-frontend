@@ -1,17 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import formatBytes from "../helpers/formatBytes";
 import AssetCardMenu from "./AssetCardMenu";
 
-export default function AssetCard({ img, name, ean, extension, bytes, width, height, type }) {
-  const [toggleSelect, setToggleSelect] = useState(false);
+export default function AssetCard({ data, isSelected, updateUserSelection, handleTogglePanel }) {
+  const [toggleSelect, setToggleSelect] = useState(isSelected);
   const [toggleEditMenu, setToggleEditMenu] = useState(false);
   const handleToggleSelect = () => {
     setToggleSelect(!toggleSelect);
+    console.log("Item", data._id);
+
+    updateUserSelection(data);
   };
   const handleToggleEditMenu = () => {
     setToggleEditMenu(!toggleEditMenu);
   };
+
+  useEffect(() => {
+    setToggleSelect(isSelected);
+    // if (isSelected) updateUserSelection(id);
+    return () => {
+      // handleToggleSelect();
+    };
+  }, [isSelected]);
   return (
     <>
       <div className="col mb-4">
@@ -27,23 +38,24 @@ export default function AssetCard({ img, name, ean, extension, bytes, width, hei
             <FontAwesomeIcon icon="ellipsis-v" onClick={handleToggleEditMenu} />
           </div>
           <div className="card-image">
-            <img src={img} className="card-img-top" alt="..." />
+            <img src={data.secure_url} className="card-img-top" alt="..." />
           </div>
           <div className="card-body">
-            <small className="d-block text-truncate">{name}</small>
+            <small className="d-block text-truncate">{data.name}</small>
             <div className="small text-muted">
-              <span className="small">EAN: {ean}</span>
+              <span className="small">EAN: {data.meta_ean13}</span>
               <div className="d-flex justify-content-between small">
-                <span>{type}</span>
+                <span>{data.type}</span>
+                <span>.{data.meta_file_extension}</span>
                 <span>
-                  {width}x{height}{" "}
+                  {data.meta_file_width}x{data.meta_file_height}{" "}
                 </span>
-                <span>{formatBytes(bytes)} </span>
+                <span>{formatBytes(data.meta_file_bytes)} </span>
               </div>
             </div>
           </div>
         </div>
-        {toggleEditMenu === true && <AssetCardMenu handleToggleEditMenu={handleToggleEditMenu} />}
+        {toggleEditMenu === true && <AssetCardMenu handleToggleEditMenu={handleToggleEditMenu} handleTogglePanel={handleTogglePanel} />}
       </div>
     </>
   );
