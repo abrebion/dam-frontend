@@ -3,7 +3,7 @@ import AssetCard from "./AssetCard";
 import AssetPanel from "../components/AssetPanel";
 
 export default function AssetList({ assets, userSelection, updateUserSelection }) {
-  console.log("User Selection", userSelection);
+  // console.log("User Selection", userSelection);
   const isSelected = asset => !!userSelection.filter(el => el._id === asset._id).length;
   const [togglePanel, setTogglePanel] = useState(false);
   const [activeAsset, setActiveAsset] = useState(null);
@@ -15,7 +15,7 @@ export default function AssetList({ assets, userSelection, updateUserSelection }
 
   return (
     <div className="position-relative">
-      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-5">
+      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4">
         {assets.map((asset, i) => (
           <AssetCard key={i} asset={asset} isSelected={isSelected(asset)} updateUserSelection={updateUserSelection} handleTogglePanel={handleTogglePanel} />
         ))}

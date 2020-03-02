@@ -6,7 +6,7 @@ export default function AssetToolbar({ userSelection, selectAll, clearAll }) {
   const userContext = useContext(UserContext);
   const { currentUser } = userContext;
   return (
-    <div className="asset-toolbar mb-4 text-muted">
+    <div className="asset-toolbar mb-4 text-muted" style={{ backgroundColor: "white" }}>
       <ul>
         <li onClick={selectAll}>
           <FontAwesomeIcon icon={["far", "plus-square"]} />

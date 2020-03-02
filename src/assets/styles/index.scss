@@ -3,7 +3,9 @@
 
 body {
     // background: url('../images/background.jpg');
-    // background-size: cover;
+    // background-size: 110%;
+    // background-attachment: fixed;
+    // background-position: 0 0;
 }
 
 #root {
@@ -245,4 +247,15 @@ body {
     to {
         right: -1rem;
     }
+}
+
+.search {
+    .form-group {
+        margin-bottom: 0;
+    }
+}
+
+.react-select__control,
+.react-select__menu {
+    font-size: 80%;
 }

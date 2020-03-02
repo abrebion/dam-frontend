@@ -10,10 +10,10 @@ export default function Header({ toggleUploadModal }) {
   return (
     currentUser && (
       <header className="row my-3 align-items-center">
-        <div className="col-2">
-          <CroppedLogo width="200px" mb="0px" />
+        <div className="col-3 text-center">
+          <CroppedLogo width="75%" mb="0px" />
         </div>
-        <div className="col-10 d-flex flex-column text-right">
+        <div className="col-9 d-flex flex-column text-right">
           <LoginStatus />
           <Navigation toggleUploadModal={toggleUploadModal} />
         </div>
