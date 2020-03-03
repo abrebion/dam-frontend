@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
+import AsyncSelect from "react-select/async";
 import makeAnimated from "react-select/animated";
 import api from "../api/apiHandler";
 import qs from "query-string";
@@ -58,16 +59,20 @@ const customTheme = theme => {
 };
 
 export default function Search({ handleSearch }) {
+  const [names, setNames] = useState("");
   const [recipes, setRecipes] = useState([]);
   const [flavours, setFlavours] = useState([]);
   const [eans, setEANs] = useState([]);
   const [tags, setTags] = useState([]);
   const [searchQuery, setSearchQuery] = useState({});
-  const [searchQueryURL, setSearchQueryURL] = useState("");
 
   const refreshResults = meta => {
     return selectedOptions => {
-      // console.log("Meta:", meta, ">>>>", selectedOptions);
+      console.log("Meta:", meta, ">>>>", selectedOptions);
+      if (meta === "name" && selectedOptions) {
+        setSearchQuery({ ...searchQuery, name: selectedOptions.value });
+        return;
+      }
       if (!selectedOptions || !selectedOptions[0]) {
         setSearchQuery({ ...searchQuery, [meta]: null });
         return;
@@ -76,11 +81,19 @@ export default function Search({ handleSearch }) {
     };
   };
 
-  // useEffect(() => {
-  //   setSearchQueryURL("/assets/search?" + qs.stringify(searchQuery, { arrayFormat: "comma", skipNull: true }));
-  //   if (searchQueryURL) handleSearch(searchQueryURL);
-  //   // handleSearch(searchQueryURL);
-  // }, [searchQuery, searchQueryURL]);
+  const loadAsyncNames = async (inputValue, callback) => {
+    try {
+      const fetchedNames = await api.get("/assets");
+      const returnedNames = fetchedNames.data.map(el => {
+        return { value: el.name, label: el.name, meta: "name" };
+      });
+      const filteredNames = returnedNames.filter(el => el.label.match(new RegExp(inputValue, "gi")));
+      console.log(filteredNames);
+      callback(filteredNames);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     if (searchQuery) handleSearch("/assets/search?" + qs.stringify(searchQuery, { arrayFormat: "comma", skipNull: true }));
@@ -137,6 +150,11 @@ export default function Search({ handleSearch }) {
     fetchEANs();
   }, []);
 
+  const handleNameChange = newValue => {
+    setNames({ newValue });
+    return newValue;
+  };
+
   return (
     <div className="search border rounded p-3" style={{ backgroundColor: "white" }}>
       <p className="small">
@@ -148,8 +166,18 @@ export default function Search({ handleSearch }) {
         <label htmlFor="name" className="small">
           Name
         </label>
-
-        <input type="text" name="name" className="form-control form-control-sm" id="name" />
+        <AsyncSelect
+          cacheOptions
+          loadOptions={loadAsyncNames}
+          defaultOptions
+          onInputChange={handleNameChange}
+          onChange={refreshResults("name")}
+          noOptionsMessage={() => "Start typing..."}
+          classNamePrefix="react-select"
+          id="name"
+          name="name"
+          isClearable={true}
+        />
       </div>
       <div className="form-group">
         <label htmlFor="brand" className="small">
@@ -157,7 +185,6 @@ export default function Search({ handleSearch }) {
         </label>
         <Select
           options={meta_brand}
-          autoFocus={true}
           isMulti
           onChange={refreshResults("meta_brand")}
           noOptionsMessage={() => "Sorry, there are no results..."}
