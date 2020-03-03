@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AssetCard from "./AssetCard";
 import AssetPanel from "../components/AssetPanel";
+import NoResults from "../components/NoResults";
 
 export default function AssetList({ assets, userSelection, updateUserSelection }) {
   // console.log("User Selection", userSelection);
@@ -15,11 +16,15 @@ export default function AssetList({ assets, userSelection, updateUserSelection }
 
   return (
     <div className="position-relative">
-      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4">
-        {assets.map((asset, i) => (
-          <AssetCard key={i} asset={asset} isSelected={isSelected(asset)} updateUserSelection={updateUserSelection} handleTogglePanel={handleTogglePanel} />
-        ))}
-      </div>
+      {assets.length ? (
+        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4">
+          {assets.map((asset, i) => (
+            <AssetCard key={i} asset={asset} isSelected={isSelected(asset)} updateUserSelection={updateUserSelection} handleTogglePanel={handleTogglePanel} />
+          ))}
+        </div>
+      ) : (
+        <NoResults />
+      )}
       {togglePanel && <AssetPanel asset={activeAsset} handleTogglePanel={handleTogglePanel} />}
     </div>
   );

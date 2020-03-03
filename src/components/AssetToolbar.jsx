@@ -16,7 +16,7 @@ export default function AssetToolbar({ userSelection, selectAll, clearAll }) {
           <FontAwesomeIcon icon={["far", "minus-square"]} />
           <span>Clear Selection</span>
         </li>
-        <li>
+        <li className="no-link">
           <FontAwesomeIcon icon="check-circle" />
           <span>{userSelection.length} Selected</span>
         </li>

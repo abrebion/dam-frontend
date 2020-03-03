@@ -285,6 +285,11 @@ export default function Search({ handleSearch }) {
           theme={customTheme}
         />
       </div>
+      <div className="form-group">
+        <button type="submit" className="btn btn-sm btn-block btn-primary mt-3">
+          Clear All Filters
+        </button>
+      </div>
     </div>
   );
 }

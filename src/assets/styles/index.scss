@@ -40,9 +40,14 @@ body {
         border-color: $primary;
     }
 
-    .card-image img {
+    .card-image img.portrait {
         height: 100%;
         width: auto;
+    }
+
+    .card-image img.landscape {
+        width: 100%;
+        height: auto;
     }
 }
 
@@ -142,6 +147,11 @@ body {
 
             &:hover {
                 color: $primary;
+            }
+
+            &.no-link {
+                color: inherit;
+                cursor: default;
             }
 
         }
