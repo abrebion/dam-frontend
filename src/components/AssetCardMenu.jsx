@@ -18,7 +18,6 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
     document.addEventListener("mousedown", handleClick, false);
     return () => {
       document.removeEventListener("mousedown", handleClick, false);
-      handleToggleEditMenu(asset);
     };
   });
 

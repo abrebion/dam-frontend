@@ -76,13 +76,15 @@ export default function Search({ handleSearch }) {
     };
   };
 
-  // if (searchQueryURL) handleSearch(searchQueryURL);
+  // useEffect(() => {
+  //   setSearchQueryURL("/assets/search?" + qs.stringify(searchQuery, { arrayFormat: "comma", skipNull: true }));
+  //   if (searchQueryURL) handleSearch(searchQueryURL);
+  //   // handleSearch(searchQueryURL);
+  // }, [searchQuery, searchQueryURL]);
 
   useEffect(() => {
-    setSearchQueryURL("/assets/search?" + qs.stringify(searchQuery, { arrayFormat: "comma", skipNull: true }));
-    if (searchQueryURL) handleSearch(searchQueryURL);
-    // handleSearch(searchQueryURL);
-  }, [searchQuery, searchQueryURL]);
+    if (searchQuery) handleSearch("/assets/search?" + qs.stringify(searchQuery, { arrayFormat: "comma", skipNull: true }));
+  }, [searchQuery]);
 
   useEffect(() => {
     async function fetchTags() {
