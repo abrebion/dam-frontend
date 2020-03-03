@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UserContext from "../authentication/UserContext";
 import "@github/clipboard-copy-element";
 
-export default function AssetCardMenu({ asset, handleToggleEditMenu, handleTogglePanel }) {
+export default function AssetCardMenu({ asset, handleToggleEditMenu, handleTogglePanel, handleAssetDelete }) {
   const menu = useRef(null);
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
   const [menuClass, setMenuClass] = useState("");
@@ -125,7 +125,7 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
         Add to Collection
       </span>
       {currentUser.role !== "user" && (
-        <span>
+        <span onClick={() => handleAssetDelete(asset._id)}>
           <FontAwesomeIcon icon="trash-alt" />
           Delete
         </span>

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UserContext from "../authentication/UserContext";
 
-export default function AssetToolbar({ userSelection, selectAll, clearAll }) {
+export default function AssetToolbar({ userSelection, selectAll, clearAll, shareSelection }) {
   const userContext = useContext(UserContext);
   const { currentUser } = userContext;
   return (
@@ -22,13 +22,13 @@ export default function AssetToolbar({ userSelection, selectAll, clearAll }) {
         </li>
       </ul>
       <ul className="flex-xl-fill justify-content-xl-end">
-        <li>
+        <li onClick={() => shareSelection("create")}>
           <FontAwesomeIcon icon="download" />
           <span>Download</span>
         </li>
-        <li>
+        <li onClick={() => shareSelection("download")}>
           <FontAwesomeIcon icon={["far", "file-archive"]} />
-          <span>Create Archive</span>
+          <span>Get Shareable Link</span>
         </li>
         <li>
           <FontAwesomeIcon icon="folder-plus" />

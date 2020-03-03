@@ -144,7 +144,7 @@ export default function Search({ handleSearch }) {
   };
 
   useEffect(() => {
-    if (searchQuery) handleSearch("/assets/search?" + qs.stringify(searchQuery, { arrayFormat: "comma", skipNull: true }));
+    if (searchQuery) handleSearch("/assets/search?sort=-createdAt&" + qs.stringify(searchQuery, { arrayFormat: "comma", skipNull: true }));
   }, [searchQuery]);
 
   useEffect(() => {
@@ -387,7 +387,7 @@ export default function Search({ handleSearch }) {
         />
       </div>
       <div className="form-group">
-        <button type="submit" className="btn btn-sm btn-block btn-primary mt-3" onClick={handleResetFilters}>
+        <button type="submit" className="btn btn-sm btn-block btn-primary mt-3" style={{ height: "38px" }} onClick={handleResetFilters}>
           Clear All Filters
         </button>
       </div>

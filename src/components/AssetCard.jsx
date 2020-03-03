@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import formatBytes from "../helpers/formatBytes";
 import AssetCardMenu from "./AssetCardMenu";
 
-export default function AssetCard({ asset, isSelected, updateUserSelection, handleTogglePanel }) {
+export default function AssetCard({ asset, isSelected, updateUserSelection, handleTogglePanel, handleAssetDelete }) {
   const [toggleSelect, setToggleSelect] = useState(isSelected);
   const [toggleEditMenu, setToggleEditMenu] = useState(false);
   const handleToggleSelect = () => {
@@ -54,7 +54,9 @@ export default function AssetCard({ asset, isSelected, updateUserSelection, hand
             </div>
           </div>
         </div>
-        {toggleEditMenu === true && <AssetCardMenu asset={asset} handleToggleEditMenu={handleToggleEditMenu} handleTogglePanel={handleTogglePanel} />}
+        {toggleEditMenu === true && (
+          <AssetCardMenu asset={asset} handleToggleEditMenu={handleToggleEditMenu} handleTogglePanel={handleTogglePanel} handleAssetDelete={handleAssetDelete} />
+        )}
       </div>
     </>
   );
