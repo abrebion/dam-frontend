@@ -27,7 +27,7 @@ export default function Dashboard({ toggleUploadModal }) {
   //   handleSearch();
   // }, [searchResults]);
 
-  const handleSearch = async url => {
+  const handleSearch = async (url = "/assets/search?") => {
     try {
       if (url) {
         console.log("You performed a search to: ", url);

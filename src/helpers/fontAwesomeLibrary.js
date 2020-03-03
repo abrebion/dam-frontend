@@ -17,7 +17,8 @@ import {
   faUser,
   faCheckCircle,
   faCheckSquare,
-  faTimes
+  faTimes,
+  faPaintRoller
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faCheckSquare as faRegularCheckSquare,
@@ -53,5 +54,6 @@ library.add(
   faUser,
   faCheckCircle,
   faRegularWindowClose,
-  faTimes
+  faTimes,
+  faPaintRoller
 );

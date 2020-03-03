@@ -59,16 +59,64 @@ const customTheme = theme => {
 };
 
 export default function Search({ handleSearch }) {
-  const [names, setNames] = useState("");
+  const [nameSelect, setNameSelect] = useState("");
   const [recipes, setRecipes] = useState([]);
   const [flavours, setFlavours] = useState([]);
   const [eans, setEANs] = useState([]);
   const [tags, setTags] = useState([]);
   const [searchQuery, setSearchQuery] = useState({});
+  const [brandSelect, setBrandSelect] = useState([]);
+  const [recipeSelect, setRecipeSelect] = useState([]);
+  const [flavourSelect, setFlavourSelect] = useState([]);
+  const [packagingSelect, setPackagingSelect] = useState([]);
+  const [capacitySelect, setCapacitySelect] = useState([]);
+  const [formatSelect, setFormatSelect] = useState([]);
+  const [tagsSelect, setTagsSelect] = useState([]);
+  const [eanSelect, setEanSelect] = useState([]);
 
   const refreshResults = meta => {
     return selectedOptions => {
-      console.log("Meta:", meta, ">>>>", selectedOptions);
+      // console.log("Meta:", meta, ">>>>", selectedOptions);
+      switch (meta) {
+        case "name":
+          if (selectedOptions) setNameSelect(selectedOptions.name);
+          else setNameSelect(null);
+          break;
+        case "meta_brand":
+          if (selectedOptions) setBrandSelect([...selectedOptions]);
+          else setBrandSelect(null);
+          break;
+        case "meta_recipe":
+          if (selectedOptions) setRecipeSelect([...selectedOptions]);
+          else setRecipeSelect(null);
+          break;
+        case "meta_flavour":
+          if (selectedOptions) setFlavourSelect([...selectedOptions]);
+          else setFlavourSelect(null);
+          break;
+        case "meta_capacity":
+          if (selectedOptions) setCapacitySelect([...selectedOptions]);
+          else setCapacitySelect(null);
+          break;
+        case "meta_packaging":
+          if (selectedOptions) setPackagingSelect([...selectedOptions]);
+          else setPackagingSelect(null);
+          break;
+        case "meta_format":
+          if (selectedOptions) setFormatSelect([...selectedOptions]);
+          else setFormatSelect(null);
+          break;
+        case "meta_tags":
+          if (selectedOptions) setTagsSelect([...selectedOptions]);
+          else setTagsSelect(null);
+          break;
+        case "meta_ean13":
+          if (selectedOptions) setEanSelect([...selectedOptions]);
+          else setEanSelect(null);
+          break;
+        default:
+          break;
+      }
       if (meta === "name" && selectedOptions) {
         setSearchQuery({ ...searchQuery, name: selectedOptions.value });
         return;
@@ -151,8 +199,23 @@ export default function Search({ handleSearch }) {
   }, []);
 
   const handleNameChange = newValue => {
-    setNames({ newValue });
+    setNameSelect({ newValue });
     return newValue;
+  };
+
+  const handleResetFilters = e => {
+    e.preventDefault();
+    setNameSelect(null);
+    setBrandSelect(null);
+    setRecipeSelect(null);
+    setFlavourSelect(null);
+    setCapacitySelect(null);
+    setPackagingSelect(null);
+    setFormatSelect(null);
+    setTagsSelect(null);
+    setEanSelect(null);
+    setSearchQuery(null);
+    handleSearch();
   };
 
   return (
@@ -173,10 +236,11 @@ export default function Search({ handleSearch }) {
           onInputChange={handleNameChange}
           onChange={refreshResults("name")}
           noOptionsMessage={() => "Start typing..."}
-          classNamePrefix="react-select"
-          id="name"
           name="name"
+          id="name"
+          classNamePrefix="react-select"
           isClearable={true}
+          value={nameSelect}
         />
       </div>
       <div className="form-group">
@@ -193,6 +257,7 @@ export default function Search({ handleSearch }) {
           components={animatedComponents}
           classNamePrefix="react-select"
           theme={customTheme}
+          value={brandSelect}
         />
       </div>
       <div className="form-group">
@@ -210,6 +275,7 @@ export default function Search({ handleSearch }) {
           components={animatedComponents}
           classNamePrefix="react-select"
           theme={customTheme}
+          value={recipeSelect}
         />
       </div>
       <div className="form-group">
@@ -227,6 +293,7 @@ export default function Search({ handleSearch }) {
           components={animatedComponents}
           classNamePrefix="react-select"
           theme={customTheme}
+          value={flavourSelect}
         />
       </div>
       <div className="form-group">
@@ -244,6 +311,7 @@ export default function Search({ handleSearch }) {
           components={animatedComponents}
           classNamePrefix="react-select"
           theme={customTheme}
+          value={capacitySelect}
         />
       </div>
       <div className="form-group">
@@ -261,6 +329,7 @@ export default function Search({ handleSearch }) {
           components={animatedComponents}
           classNamePrefix="react-select"
           theme={customTheme}
+          value={packagingSelect}
         />
       </div>
       <div className="form-group">
@@ -278,6 +347,7 @@ export default function Search({ handleSearch }) {
           components={animatedComponents}
           classNamePrefix="react-select"
           theme={customTheme}
+          value={formatSelect}
         />
       </div>
       <div className="form-group">
@@ -295,6 +365,7 @@ export default function Search({ handleSearch }) {
           components={animatedComponents}
           classNamePrefix="react-select"
           theme={customTheme}
+          value={tagsSelect}
         />
       </div>
       <div className="form-group">
@@ -312,10 +383,11 @@ export default function Search({ handleSearch }) {
           components={animatedComponents}
           classNamePrefix="react-select"
           theme={customTheme}
+          value={eanSelect}
         />
       </div>
       <div className="form-group">
-        <button type="submit" className="btn btn-sm btn-block btn-primary mt-3">
+        <button type="submit" className="btn btn-sm btn-block btn-primary mt-3" onClick={handleResetFilters}>
           Clear All Filters
         </button>
       </div>
