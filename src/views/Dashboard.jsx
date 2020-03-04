@@ -9,29 +9,12 @@ import { generateArchive } from "../helpers/cloudinary";
 export default function Dashboard({ toggleUploadModal }) {
   const [searchResults, setSearchResults] = useState([]);
   const [userSelection, setUserSelection] = useState([]);
-
-  // useEffect(() => {
-  //   async function fetchAssets() {
-  //     try {
-  //       const fetchedAssets = await api.get("/assets/search?sort=-createdAt");
-  //       console.log("All fetched assets", fetchedAssets.data);
-  //       setSearchResults([...fetchedAssets.data]);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  //   fetchAssets();
-  //   return () => {};
-  // }, []);
-
-  // useEffect(() => {
-  //   handleSearch();
-  // }, [searchResults]);
+  const [userFeedback, setUserFeedback] = useState("");
 
   const handleSearch = async (url = "/assets/search?") => {
     try {
       if (url) {
-        console.log("You performed a search to: ", url);
+        // console.log("You performed a search to: ", url);
         const results = await api.get(url);
         setSearchResults(results.data);
       }
@@ -42,7 +25,7 @@ export default function Dashboard({ toggleUploadModal }) {
 
   const handleAssetDelete = async id => {
     try {
-      console.log("You are about to delete the asset ", id);
+      // console.log("You are about to delete the asset ", id);
       await api.delete("/assets/" + id);
       setSearchResults(searchResults.filter(el => el._id !== id));
     } catch (error) {
@@ -52,11 +35,11 @@ export default function Dashboard({ toggleUploadModal }) {
 
   const selectAll = () => {
     setUserSelection([...searchResults]);
-    console.log("All files selected");
+    // console.log("All files selected");
   };
   const clearAll = () => {
     setUserSelection([]);
-    console.log("All files cleared");
+    // console.log("All files cleared");
   };
 
   const updateUserSelection = asset => {
@@ -70,7 +53,7 @@ export default function Dashboard({ toggleUploadModal }) {
     }
   };
 
-  const downloadZip = async (url, name) => {
+  const downloadArchive = async (url, name) => {
     let blob = await fetch(url).then(r => r.blob());
     let dataUrl = await new Promise(resolve => {
       let reader = new FileReader();
@@ -86,13 +69,15 @@ export default function Dashboard({ toggleUploadModal }) {
   };
 
   const shareSelection = async mode => {
-    console.log("User wants to share the following files: ", userSelection);
+    // console.log("User wants to share the following files: ", userSelection);
     const public_ids = userSelection.map(el => el.public_id);
     try {
       const response = await generateArchive(public_ids, mode);
-      console.log(response);
       if (mode === "create") {
-        downloadZip(response.data.secure_url, "archive.zip");
+        downloadArchive(response.data.secure_url, "archive.zip");
+      } else {
+        // console.log(response);
+        setUserFeedback(response);
       }
     } catch (error) {
       console.error(error);
@@ -101,7 +86,7 @@ export default function Dashboard({ toggleUploadModal }) {
 
   return (
     <div className="container-fluid">
-      <Header toggleUploadModal={toggleUploadModal} />
+      <Header toggleUploadModal={toggleUploadModal} userFeedback={userFeedback} setUserFeedback={setUserFeedback} />
       <div className="row">
         <div className="col-3">
           <Search handleSearch={handleSearch} />

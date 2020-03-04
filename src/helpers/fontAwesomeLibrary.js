@@ -18,7 +18,8 @@ import {
   faCheckCircle,
   faCheckSquare,
   faTimes,
-  faPaintRoller
+  faPaintRoller,
+  faCopy
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faCheckSquare as faRegularCheckSquare,
@@ -31,6 +32,7 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 library.add(
   faClipboardCheck,
+  faCopy,
   faDownload,
   faCheckSquare,
   faEdit,

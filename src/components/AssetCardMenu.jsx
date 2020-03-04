@@ -114,7 +114,7 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
           handleToggleEditMenu(asset);
         }}
       >
-        <FontAwesomeIcon icon="paint-roller" />
+        <FontAwesomeIcon icon="copy" />
         Copy to Clipboard
       </span>
       <span

@@ -24,7 +24,7 @@ export default function AssetToolbar({ userSelection, selectAll, clearAll, share
       <ul className="flex-xl-fill justify-content-xl-end">
         <li onClick={userSelection.length ? () => shareSelection("create") : undefined} className={!userSelection.length ? "inactive-link" : undefined}>
           <FontAwesomeIcon icon="download" />
-          <span>Download</span>
+          <span>Download Archive</span>
         </li>
         <li onClick={userSelection.length ? () => shareSelection("download") : undefined} className={!userSelection.length ? "inactive-link" : undefined}>
           <FontAwesomeIcon icon={["far", "file-archive"]} />
