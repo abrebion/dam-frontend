@@ -22,26 +22,26 @@ export default function AssetToolbar({ userSelection, selectAll, clearAll, share
         </li>
       </ul>
       <ul className="flex-xl-fill justify-content-xl-end">
-        <li onClick={() => shareSelection("create")}>
+        <li onClick={userSelection.length ? () => shareSelection("create") : undefined} className={!userSelection.length ? "inactive-link" : undefined}>
           <FontAwesomeIcon icon="download" />
           <span>Download</span>
         </li>
-        <li onClick={() => shareSelection("download")}>
+        <li onClick={userSelection.length ? () => shareSelection("download") : undefined} className={!userSelection.length ? "inactive-link" : undefined}>
           <FontAwesomeIcon icon={["far", "file-archive"]} />
           <span>Get Shareable Link</span>
         </li>
-        <li>
+        <li className={!userSelection.length ? "inactive-link" : undefined}>
           <FontAwesomeIcon icon="folder-plus" />
           <span>Add to Collection</span>
         </li>
       </ul>
       {currentUser && currentUser.role !== "user" && (
         <ul>
-          <li>
+          <li className={!userSelection.length ? "inactive-link" : undefined}>
             <FontAwesomeIcon icon="edit" />
             <span>Bulk Edit</span>
           </li>
-          <li>
+          <li className={!userSelection.length ? "inactive-link" : undefined}>
             <FontAwesomeIcon icon="trash-alt" />
             <span>Delete</span>
           </li>

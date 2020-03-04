@@ -154,6 +154,11 @@ body {
                 cursor: default;
             }
 
+            &.inactive-link {
+                color: inherit;
+                cursor: not-allowed;
+            }
+
         }
 
     }

@@ -108,15 +108,25 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
           Quick View
         </span>
       )}
-      <span onClick={() => copyImageToClipbaord(asset.secure_url)}>
+      <span
+        onClick={() => {
+          copyImageToClipbaord(asset.secure_url);
+          handleToggleEditMenu(asset);
+        }}
+      >
         <FontAwesomeIcon icon="paint-roller" />
         Copy to Clipboard
       </span>
-      <span onClick={() => downloadImage(asset.secure_url, asset.name)}>
+      <span
+        onClick={() => {
+          downloadImage(asset.secure_url, asset.name);
+          handleToggleEditMenu(asset);
+        }}
+      >
         <FontAwesomeIcon icon="download" />
         Download
       </span>
-      <span>
+      <span onClick={() => handleToggleEditMenu(asset)}>
         <FontAwesomeIcon icon="link" />
         <clipboard-copy value={asset.secure_url}>Copy URL</clipboard-copy>
       </span>

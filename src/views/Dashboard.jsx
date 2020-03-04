@@ -90,21 +90,13 @@ export default function Dashboard({ toggleUploadModal }) {
     const public_ids = userSelection.map(el => el.public_id);
     try {
       const response = await generateArchive(public_ids, mode);
-      console.log(response.data);
+      console.log(response);
       if (mode === "create") {
         downloadZip(response.data.secure_url, "archive.zip");
       }
     } catch (error) {
       console.error(error);
     }
-    // generateArchive(public_ids, mode)
-    //   .then(res => {
-    //     console.log(res.data);
-    //     if (mode === "create") {
-    //       downloadZip(res.data.secure_url, "archive.zip");
-    //     }
-    //   })
-    //   .catch(err => console.log(err));
   };
 
   return (

@@ -27,9 +27,11 @@ const meta_capacity = [
   { value: "2l", label: "2l", meta: "meta_capacity" },
   { value: "1.5l", label: "1.5l", meta: "meta_capacity" },
   { value: "1l", label: "1l", meta: "meta_capacity" },
+  { value: "75cl", label: "75cl", meta: "meta_capacity" },
   { value: "50cl", label: "50cl", meta: "meta_capacity" },
   { value: "33cl", label: "33cl", meta: "meta_capacity" },
   { value: "25cl", label: "25cl", meta: "meta_capacity" },
+  { value: "20cl", label: "20cl", meta: "meta_capacity" },
   { value: "15cl", label: "15cl", meta: "meta_capacity" }
 ];
 

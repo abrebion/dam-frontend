@@ -22,6 +22,11 @@ export default function AssetCard({ asset, isSelected, updateUserSelection, hand
   useEffect(() => {
     setToggleSelect(isSelected);
   }, [isSelected]);
+
+  useEffect(() => {
+    setToggleEditMenu(toggleEditMenu);
+  }, [toggleEditMenu]);
+
   return (
     <>
       <div className="col mb-4">
