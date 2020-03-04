@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import croppedLogo from "../assets/images/logo-cropped.svg";
+import croppedLogo from "../../assets/images/logo-cropped.svg";
 
 const CustomLogo = styled.img`
   width: ${props => (props.width ? props.width : "")};

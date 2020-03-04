@@ -14,7 +14,14 @@ export const useAuth = () => {
       .then(res => {
         setIsLoggedIn(true);
         setIsLoading(false);
-        setCurrentUser(res.data.currentUser);
+        const currentUser = res.data.currentUser;
+        api
+          .get("/users/" + currentUser._id + "/collections")
+          .then(res => {
+            currentUser.collections = res.data.data;
+            setCurrentUser(currentUser);
+          })
+          .catch(err => console.error("Could not fetch user collections"));
       })
       .catch(() => {
         setCurrentUser(null);

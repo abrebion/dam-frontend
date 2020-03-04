@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { useWindowDimensions } from "../helpers/useWindowDimensions";
+import { useWindowDimensions } from "../../helpers/useWindowDimensions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import UserContext from "../authentication/UserContext";
+import UserContext from "../../authentication/UserContext";
 import "@github/clipboard-copy-element";
 
 export default function AssetCardMenu({ asset, handleToggleEditMenu, handleTogglePanel, handleAssetDelete }) {

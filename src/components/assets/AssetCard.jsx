@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import formatBytes from "../helpers/formatBytes";
+import formatBytes from "../../helpers/formatBytes";
 import AssetCardMenu from "./AssetCardMenu";
 
 export default function AssetCard({ asset, isSelected, updateUserSelection, handleTogglePanel, handleAssetDelete }) {

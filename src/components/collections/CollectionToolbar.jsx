@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import UserContext from "../authentication/UserContext";
-import api from "../api/apiHandler";
+import UserContext from "../../authentication/UserContext";
+import api from "../../api/apiHandler";
 
-export default function CollectionToolbar({ userCollections, setUserCollections }) {
+export default function CollectionToolbar() {
   const userContext = useContext(UserContext);
-  const { currentUser } = userContext;
+  const { currentUser, setCurrentUser } = userContext;
   const [collectionForm, setCollectionForm] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState("My New Collection");
 
@@ -17,7 +17,7 @@ export default function CollectionToolbar({ userCollections, setUserCollections 
         user: currentUser._id
       });
       console.log("Response:", response.data);
-      setUserCollections([...userCollections, response.data]);
+      setCurrentUser({ ...currentUser, collections: [...currentUser.collections, response.data] });
       cancelNewCollection();
     } catch (error) {
       console.error(error);

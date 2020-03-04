@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import UserContext from "../authentication/UserContext";
+import UserContext from "../../authentication/UserContext";
 
 export default function Navigation({ toggleUploadModal }) {
   const userContext = useContext(UserContext);

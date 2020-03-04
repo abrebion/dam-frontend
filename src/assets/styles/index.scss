@@ -97,7 +97,7 @@ body {
             color: $primary;
         }
 
-        >svg {
+        svg {
             margin-right: .5rem;
         }
     }
@@ -307,5 +307,18 @@ body {
     span {
         margin-left: .5rem;
         margin-right: .5rem;
+    }
+}
+
+.link {
+    color: inherit;
+
+    &:hover {
+        color: $primary;
+        text-decoration: none;
+    }
+
+    svg {
+        width: 1em;
     }
 }

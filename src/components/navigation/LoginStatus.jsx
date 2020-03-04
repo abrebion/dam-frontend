@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { withRouter } from "react-router-dom";
-import api from "../api/apiHandler";
-import UserContext from "../authentication/UserContext";
+import api from "../../api/apiHandler";
+import UserContext from "../../authentication/UserContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default withRouter(function LoginStatus(props) {

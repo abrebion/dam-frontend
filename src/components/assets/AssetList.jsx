@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import AssetCard from "./AssetCard";
-import AssetPanel from "../components/AssetPanel";
-import NoResults from "../components/NoResults";
+import AssetPanel from "./AssetPanel";
+import NoResults from "./NoResults";
 
 export default function AssetList({ assets, userSelection, updateUserSelection, handleAssetDelete }) {
   // console.log("User Selection", userSelection);

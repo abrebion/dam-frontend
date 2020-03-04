@@ -13,7 +13,7 @@ import ResetPassword from "./views/ResetPassword";
 import Register from "./views/Register";
 import Dashboard from "./views/Dashboard";
 import Collections from "./views/Collections";
-import NewAssetModal from "./components/NewAssetModal";
+import NewAssetModal from "./components/assets/NewAssetModal";
 
 export default function App() {
   const { isLoading } = useAuth();
@@ -38,6 +38,7 @@ export default function App() {
           <Route exact path="/reset-password" component={ResetPassword} />
           <Route exact path="/first-connection" render={props => <ResetPassword {...props} firstConnection={true} />} />
           <ProtectedRoute exact path="/dashboard" component={Dashboard} toggleUploadModal={toggleUploadModal} />
+          <ProtectedRoute path="/dashboard/:id" component={Dashboard} toggleUploadModal={toggleUploadModal} />
           <ProtectedRoute exact path="/collections" component={Collections} toggleUploadModal={toggleUploadModal} />
         </Switch>
       )}

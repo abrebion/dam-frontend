@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AssetUploader from "./AssetUploader";
-import api from "../api/apiHandler";
-import UserContext from "../authentication/UserContext";
+import api from "../../api/apiHandler";
+import UserContext from "../../authentication/UserContext";
 
 export default function AssetPanel({ asset, handleTogglePanel }) {
   const userContext = useContext(UserContext);

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import UserContext from "../authentication/UserContext";
+import UserContext from "../../authentication/UserContext";
 import CroppedLogo from "./CroppedLogo";
 import LoginStatus from "./LoginStatus";
 import Navigation from "./Navigation";

@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import AssetUploader from "./AssetUploader";
-import { useState } from "react";
 
 export default function NewAssetModal({ toggleUploadModal }) {
   const [showSaveButton, setShowSaveButton] = useState(false);

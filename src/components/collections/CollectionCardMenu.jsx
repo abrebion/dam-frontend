@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
-import { useWindowDimensions } from "../helpers/useWindowDimensions";
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { useWindowDimensions } from "../../helpers/useWindowDimensions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "@github/clipboard-copy-element";
 
@@ -29,8 +30,10 @@ export default function CollectionCardMenu({ collection, handleToggleMenu, handl
   return (
     <div className={"card-menu text-muted " + menuClass} ref={menu}>
       <span>
-        <FontAwesomeIcon icon="edit" />
-        Edit
+        <Link to={"/dashboard/" + collection._id} className="link">
+          <FontAwesomeIcon icon="edit" />
+          Edit
+        </Link>
       </span>
       <span
         onClick={() => {

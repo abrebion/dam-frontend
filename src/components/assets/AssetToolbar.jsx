@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import UserContext from "../authentication/UserContext";
+import UserContext from "../../authentication/UserContext";
 
 export default function AssetToolbar({ userSelection, selectAll, clearAll, shareSelection }) {
   const userContext = useContext(UserContext);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import AsyncSelect from "react-select/async";
 import makeAnimated from "react-select/animated";
-import api from "../api/apiHandler";
+import api from "../../api/apiHandler";
 import qs from "query-string";
 
 const animatedComponents = makeAnimated();
@@ -138,7 +138,7 @@ export default function Search({ handleSearch }) {
         return { value: el.name, label: el.name, meta: "name" };
       });
       const filteredNames = returnedNames.filter(el => el.label.match(new RegExp(inputValue, "gi")));
-      console.log(filteredNames);
+      // console.log(filteredNames);
       callback(filteredNames);
     } catch (error) {
       console.error(error);

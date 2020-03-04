@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from "react";
-import Header from "../components/Header";
-import Search from "../components/Search";
-import AssetToolbar from "../components/AssetToolbar";
-import AssetList from "../components/AssetList";
+import React, { useState, useEffect, useContext } from "react";
+import Header from "../components/navigation/Header";
+import Search from "../components/assets/Search";
+import AssetToolbar from "../components/assets/AssetToolbar";
+import AssetList from "../components/assets/AssetList";
+import UserContext from "../authentication/UserContext";
 import api from "../api/apiHandler";
 import { generateArchive } from "../helpers/cloudinary";
 
-export default function Dashboard({ toggleUploadModal }) {
+export default function Dashboard({ toggleUploadModal, history, match }) {
   const [searchResults, setSearchResults] = useState([]);
   const [userSelection, setUserSelection] = useState([]);
   const [userFeedback, setUserFeedback] = useState("");
+  const userContext = useContext(UserContext);
+  const { currentUser, setCurrentUser } = userContext;
+
+  const activeCollection = match.params.id;
+  // console.log("Active Collection", activeCollection);
 
   const handleSearch = async (url = "/assets/search?") => {
     try {

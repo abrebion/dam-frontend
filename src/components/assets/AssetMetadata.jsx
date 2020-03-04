@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import api from "../api/apiHandler";
-import formatBytes from "../helpers/formatBytes";
+import api from "../../api/apiHandler";
+import formatBytes from "../../helpers/formatBytes";
 
 export default function AssetMetadata({ cloudinaryData, toggleUploadModal }) {
   const [assetMetadata, setAssetMetadata] = useState({

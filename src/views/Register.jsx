@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import UserContext from "../authentication/UserContext";
 import { Link } from "react-router-dom";
-import Logo from "../components/Logo";
+import Logo from "../components/navigation/Logo";
 
 export default function Register(props) {
   const userContext = useContext(UserContext);

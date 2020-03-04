@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../authentication/UserContext";
 import api from "../api/apiHandler";
-import Logo from "../components/Logo";
+import Logo from "../components/navigation/Logo";
 
 export default function Login(props) {
   const [email, setEmail] = useState("abrebion@gmail.com");

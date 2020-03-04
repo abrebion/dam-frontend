@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import UserContext from "../authentication/UserContext";
 import api from "../api/apiHandler";
 import { Link } from "react-router-dom";
-import Logo from "../components/Logo";
+import Logo from "../components/navigation/Logo";
 
 export default function RequestAccess(props) {
   const userContext = useContext(UserContext);
