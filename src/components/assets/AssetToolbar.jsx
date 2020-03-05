@@ -27,7 +27,7 @@ export default withRouter(function AssetToolbar({
 
   return (
     <React.Fragment>
-      {activeCollection && (
+      {activeCollection && match.params.id && (
         <div className="active-collection-toolbar mb-2 text-muted small">
           <ul>
             <li>
@@ -68,7 +68,7 @@ export default withRouter(function AssetToolbar({
             <span>{userSelection.length} Selected</span>
           </li>
         </ul>
-        {activeCollection ? (
+        {activeCollection && match.params.id ? (
           <ul>
             <li className={!userSelection.length ? "inactive-link" : undefined} onClick={userSelection.length ? () => addToActiveCollection(userSelection) : undefined}>
               <FontAwesomeIcon icon="folder-plus" />

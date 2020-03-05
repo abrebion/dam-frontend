@@ -8,10 +8,10 @@ export default function ResetPassword(props) {
   const userContext = useContext(UserContext);
   const { currentUser } = userContext;
   const [{ email, currentPassword, newPassword, newPasswordConfirmation }, setChangePassword] = useState({
-    email: "abrebion@gmail.com",
-    currentPassword: "12345",
-    newPassword: "12345",
-    newPasswordConfirmation: "12345"
+    email: "",
+    currentPassword: "",
+    newPassword: "",
+    newPasswordConfirmation: ""
   });
   const [userFeedback, setUserFeedback] = useState({ status: "", message: "" });
 

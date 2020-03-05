@@ -1,10 +1,21 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AssetUploader from "./AssetUploader";
 import api from "../../api/apiHandler";
+import Select from "react-select";
 import UserContext from "../../authentication/UserContext";
 
-export default function AssetPanel({ asset, handleTogglePanel }) {
+const customTheme = theme => {
+  return {
+    ...theme,
+    colors: {
+      ...theme.colors,
+      primary: "#007696"
+    }
+  };
+};
+
+export default function AssetPanel({ asset, handleTogglePanel, handleSearch }) {
   const userContext = useContext(UserContext);
   const { currentUser } = userContext;
 
@@ -19,10 +30,70 @@ export default function AssetPanel({ asset, handleTogglePanel }) {
     meta_packaging: asset.meta_packaging,
     meta_capacity: asset.meta_capacity,
     meta_format: asset.meta_format,
-    meta_tags: []
+    meta_tags: asset.meta_tags
   });
 
   const [mode, setMode] = useState("edit");
+  const [recipes, setRecipes] = useState([]);
+  const [flavours, setFlavours] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [defaultTags, setDefaultTags] = useState([]);
+
+  useEffect(() => {
+    async function fetchTags() {
+      try {
+        const fetchedTags = await api.get("/tags");
+        const tags = fetchedTags.data.map(el => {
+          return { value: el._id, label: el.name, meta: "meta_tags" };
+        });
+        setDefaultTags(
+          tags.filter(el => {
+            return asset.meta_tags.includes(el.value);
+          })
+        );
+        // setDefaultTags(defaultTags);
+        setTags(tags);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    async function fetchRecipes() {
+      try {
+        const fetchedRecipes = await api.get("/assets/recipes");
+        const recipes = fetchedRecipes.data.map(el => {
+          return { value: el, label: el, meta: "meta_recipe" };
+        });
+        setRecipes(recipes);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    async function fetchFlavours() {
+      try {
+        const fetchedFlavours = await api.get("/assets/flavours");
+        const flavours = fetchedFlavours.data.map(el => {
+          return { value: el, label: el, meta: "meta_flavour" };
+        });
+        setFlavours(flavours);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchRecipes();
+    fetchFlavours();
+    fetchTags();
+  }, []);
+
+  const handleSelect = meta => {
+    return selectedOptions => {
+      if (meta === "meta_tags") {
+        console.log(selectedOptions);
+        setDefaultTags(selectedOptions);
+        selectedOptions.value = selectedOptions.map(el => el.value);
+      }
+      setAssetMetadata({ ...assetMetadata, [meta]: selectedOptions.value });
+    };
+  };
 
   const handleInput = e => {
     setAssetMetadata({ ...assetMetadata, [e.target.name]: e.target.value });
@@ -38,7 +109,7 @@ export default function AssetPanel({ asset, handleTogglePanel }) {
     }
   };
 
-  const handleUpload = () => {
+  const handleUpload = e => {
     setMode("upload");
     console.log("Upload new file");
   };
@@ -52,7 +123,7 @@ export default function AssetPanel({ asset, handleTogglePanel }) {
         </div>
       ) : (
         <div className="asset-panel-upload">
-          <AssetUploader />
+          <AssetUploader handleSearch={handleSearch} mode="edit" />
         </div>
       )}
 
@@ -185,7 +256,18 @@ export default function AssetPanel({ asset, handleTogglePanel }) {
                   Tags
                 </label>
                 <div className="col-sm-9">
-                  <input type="text" name="meta_tags" className="form-control form-control-sm" id="tags" value={assetMetadata.meta_tags} />
+                  <Select
+                    options={tags}
+                    isMulti
+                    onChange={handleSelect("meta_tags")}
+                    name="meta_tags"
+                    id="meta_tags"
+                    classNamePrefix="react-select"
+                    theme={customTheme}
+                    // value={assetMetadata.meta_tags}
+                    value={defaultTags}
+                  />
+                  {/* <input type="text" name="meta_tags" className="form-control form-control-sm" id="tags" value={assetMetadata.meta_tags} /> */}
                 </div>
               </div>
               {currentUser && currentUser.role !== "user" && (

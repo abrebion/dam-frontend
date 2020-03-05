@@ -41,7 +41,7 @@ const Container = styled.div`
   }
 `;
 
-export default function AssetUploader({ toggleSaveButton, toggleUploadModal }) {
+export default function AssetUploader({ mode, toggleSaveButton, toggleUploadModal, handleSearch, searchResults, setSearchResults }) {
   const [asset, setAsset] = useState({});
 
   const onDrop = useCallback(
@@ -62,7 +62,7 @@ export default function AssetUploader({ toggleSaveButton, toggleUploadModal }) {
           });
       });
       axios.all(uploaders).then(() => {
-        toggleSaveButton();
+        if (mode === "add") toggleSaveButton();
       });
     },
     [toggleSaveButton]
@@ -79,7 +79,9 @@ export default function AssetUploader({ toggleSaveButton, toggleUploadModal }) {
           <p className="mt-3 upload-text">Drag 'n' drop a file here, or click to select one</p>
         </Container>
       )}
-      {acceptedFiles.length > 0 && <AssetMetadata cloudinaryData={asset} toggleUploadModal={toggleUploadModal} />}
+      {acceptedFiles.length > 0 && mode === "add" && (
+        <AssetMetadata cloudinaryData={asset} toggleUploadModal={toggleUploadModal} handleSearch={handleSearch} searchResults={searchResults} setSearchResults={setSearchResults} />
+      )}
     </div>
   );
 }

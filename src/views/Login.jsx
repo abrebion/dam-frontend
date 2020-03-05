@@ -5,7 +5,7 @@ import api from "../api/apiHandler";
 import Logo from "../components/navigation/Logo";
 
 export default function Login(props) {
-  const [email, setEmail] = useState("abrebion@gmail.com");
+  const [email, setEmail] = useState("user@suntory.com");
   const [password, setPassword] = useState("12345");
   const [userFeedback, setUserFeedback] = useState("");
   const userContext = useContext(UserContext);

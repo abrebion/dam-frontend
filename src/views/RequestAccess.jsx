@@ -7,7 +7,7 @@ import Logo from "../components/navigation/Logo";
 export default function RequestAccess(props) {
   const userContext = useContext(UserContext);
   const { currentUser } = userContext;
-  const [{ firstname, lastname, email }, setUserRequest] = useState({ firstname: "Anthony", lastname: "Brebion", email: "anthony.brebion@suntory.com" });
+  const [{ firstname, lastname, email }, setUserRequest] = useState({ firstname: "", lastname: "", email: "" });
   const [userFeedback, setUserFeedback] = useState("");
 
   useEffect(() => {

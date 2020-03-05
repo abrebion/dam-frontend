@@ -3,7 +3,7 @@ import AssetCard from "./AssetCard";
 import AssetPanel from "./AssetPanel";
 import NoResults from "./NoResults";
 
-export default function AssetList({ assets, userSelection, updateUserSelection, handleAssetDelete }) {
+export default function AssetList({ assets, userSelection, updateUserSelection, handleAssetDelete, handleSearch }) {
   // console.log("User Selection", userSelection);
   const isSelected = asset => !!userSelection.filter(el => el._id === asset._id).length;
   const [togglePanel, setTogglePanel] = useState(false);
@@ -16,7 +16,7 @@ export default function AssetList({ assets, userSelection, updateUserSelection, 
 
   return (
     <div className="position-relative">
-      {assets.length ? (
+      {assets && assets.length ? (
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4">
           {assets.map((asset, i) => (
             <AssetCard
@@ -32,7 +32,16 @@ export default function AssetList({ assets, userSelection, updateUserSelection, 
       ) : (
         <NoResults />
       )}
-      {togglePanel && <AssetPanel asset={activeAsset} handleTogglePanel={handleTogglePanel} />}
+      {togglePanel && (
+        <AssetPanel
+          asset={activeAsset}
+          handleTogglePanel={e => {
+            e.persist();
+            handleTogglePanel();
+          }}
+          handleSearch={handleSearch}
+        />
+      )}
     </div>
   );
 }

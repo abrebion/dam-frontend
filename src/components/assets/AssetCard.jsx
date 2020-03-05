@@ -42,7 +42,11 @@ export default function AssetCard({ asset, isSelected, updateUserSelection, hand
             <FontAwesomeIcon icon="ellipsis-v" onClick={handleToggleEditMenu} />
           </div>
           <div className="card-image">
-            <img src={asset.secure_url} className={"card-img-top " + setAspectRatioClass(asset.meta_file_width, asset.meta_file_height)} alt="..." />
+            <img
+              src={asset.secure_url.replace("/image/upload/", "/image/upload/h_300/")}
+              className={"card-img-top " + setAspectRatioClass(asset.meta_file_width, asset.meta_file_height)}
+              alt="..."
+            />
           </div>
           <div className="card-body">
             <small className="d-block text-truncate">{asset.name}</small>

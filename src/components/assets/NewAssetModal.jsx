@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import AssetUploader from "./AssetUploader";
 
-export default function NewAssetModal({ toggleUploadModal }) {
+export default function NewAssetModal({ toggleUploadModal, searchResults, setSearchResults, handleSearch }) {
   const [showSaveButton, setShowSaveButton] = useState(false);
   const toggleSaveButton = () => {
     setShowSaveButton(true);
@@ -20,7 +20,14 @@ export default function NewAssetModal({ toggleUploadModal }) {
               </button>
             </div>
             <div className="modal-body">
-              <AssetUploader toggleSaveButton={toggleSaveButton} toggleUploadModal={toggleUploadModal} />
+              <AssetUploader
+                toggleSaveButton={toggleSaveButton}
+                toggleUploadModal={toggleUploadModal}
+                searchResults={searchResults}
+                setSearchResults={setSearchResults}
+                handleSearch={handleSearch}
+                mode="add"
+              />
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={toggleUploadModal}>

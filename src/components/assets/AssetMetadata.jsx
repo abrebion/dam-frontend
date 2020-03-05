@@ -1,18 +1,121 @@
 import React, { useState, useEffect } from "react";
+import Select from "react-select";
 import api from "../../api/apiHandler";
 import formatBytes from "../../helpers/formatBytes";
 
-export default function AssetMetadata({ cloudinaryData, toggleUploadModal }) {
+const type = [
+  { value: "Product Image", label: "Product Image", meta: "type" },
+  { value: "Video", label: "Video", meta: "type" },
+  { value: "Presentation", label: "Presentation", meta: "type" },
+  { value: "Logo", label: "Logo", meta: "type" },
+  { value: "Font", label: "Font", meta: "type" },
+  { value: "Brand Guideline", label: "Brand Guideline", meta: "type" }
+];
+
+const meta_brand = [
+  { value: "Schweppes", label: "Schweppes", meta: "meta_brand" },
+  { value: "Orangina", label: "Orangina", meta: "meta_brand" },
+  { value: "Oasis", label: "Oasis", meta: "meta_brand" },
+  { value: "Oasis O'Verger", label: "Oasis O'Verger", meta: "meta_brand" },
+  { value: "MayTea", label: "MayTea", meta: "meta_brand" },
+  { value: "Pulco", label: "Pulco", meta: "meta_brand" },
+  { value: "Champomy", label: "Champomy", meta: "meta_brand" },
+  { value: "Gini", label: "Gini", meta: "meta_brand" },
+  { value: "Canada Dry", label: "Canada Dry", meta: "meta_brand" },
+  { value: "Pampryl", label: "Pampryl", meta: "meta_brand" },
+  { value: "Ricqlès", label: "Ricqlès", meta: "meta_brand" },
+  { value: "Brut de Pomme", label: "Brut de Pomme", meta: "meta_brand" },
+  { value: "Banga", label: "Banga", meta: "meta_brand" }
+];
+
+const meta_capacity = [
+  { value: "2l", label: "2l", meta: "meta_capacity" },
+  { value: "1.5l", label: "1.5l", meta: "meta_capacity" },
+  { value: "1l", label: "1l", meta: "meta_capacity" },
+  { value: "75cl", label: "75cl", meta: "meta_capacity" },
+  { value: "50cl", label: "50cl", meta: "meta_capacity" },
+  { value: "33cl", label: "33cl", meta: "meta_capacity" },
+  { value: "25cl", label: "25cl", meta: "meta_capacity" },
+  { value: "20cl", label: "20cl", meta: "meta_capacity" },
+  { value: "15cl", label: "15cl", meta: "meta_capacity" }
+];
+
+const meta_packaging = [
+  { value: "PET", label: "PET", meta: "meta_packaging" },
+  { value: "CAN", label: "CAN", meta: "meta_packaging" },
+  { value: "VERRE", label: "VERRE", meta: "meta_packaging" }
+];
+
+const meta_format = [
+  { value: "Standard", label: "Standard", meta: "meta_format" },
+  { value: "Lot Gratuité", label: "Lot Gratuité", meta: "meta_format" },
+  { value: "Lot Physique", label: "Lot Physique", meta: "meta_format" }
+];
+
+const customTheme = theme => {
+  return {
+    ...theme,
+    colors: {
+      ...theme.colors,
+      primary: "#007696"
+    }
+  };
+};
+
+export default function AssetMetadata({ cloudinaryData, toggleUploadModal, handleSearch, searchResults, setSearchResults }) {
+  const [recipes, setRecipes] = useState([]);
+  const [flavours, setFlavours] = useState([]);
+  const [tags, setTags] = useState([]);
+
+  useEffect(() => {
+    async function fetchTags() {
+      try {
+        const fetchedTags = await api.get("/tags");
+        const tags = fetchedTags.data.map(el => {
+          return { value: el._id, label: el.name, meta: "meta_tags" };
+        });
+        setTags(tags);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    async function fetchRecipes() {
+      try {
+        const fetchedRecipes = await api.get("/assets/recipes");
+        const recipes = fetchedRecipes.data.map(el => {
+          return { value: el, label: el, meta: "meta_recipe" };
+        });
+        setRecipes(recipes);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    async function fetchFlavours() {
+      try {
+        const fetchedFlavours = await api.get("/assets/flavours");
+        const flavours = fetchedFlavours.data.map(el => {
+          return { value: el, label: el, meta: "meta_flavour" };
+        });
+        setFlavours(flavours);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchRecipes();
+    fetchFlavours();
+    fetchTags();
+  }, []);
+
   const [assetMetadata, setAssetMetadata] = useState({
-    name: "Schweppes Agrumes 1.5l",
-    type: "Product Image",
-    meta_ean13: "1234567890123",
-    meta_brand: "Schweppes",
-    meta_recipe: "Schweppes Fruit",
-    meta_flavour: "Schweppes Agrumes",
-    meta_packaging: "PET",
-    meta_capacity: "1.5l",
-    meta_format: "Standard",
+    name: "",
+    type: "",
+    meta_ean13: "",
+    meta_brand: "",
+    meta_recipe: "",
+    meta_flavour: "",
+    meta_packaging: "",
+    meta_capacity: "",
+    meta_format: "",
     meta_tags: []
   });
 
@@ -32,10 +135,23 @@ export default function AssetMetadata({ cloudinaryData, toggleUploadModal }) {
     setAssetMetadata({ ...assetMetadata, [e.target.name]: e.target.value });
   };
 
+  const handleSelect = meta => {
+    return selectedOptions => {
+      console.log("Selected Values", selectedOptions);
+      if (meta === "meta_tags") {
+        selectedOptions.value = selectedOptions.map(el => el.value);
+      }
+      setAssetMetadata({ ...assetMetadata, [meta]: selectedOptions.value });
+    };
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await api.post("/assets", assetMetadata);
+      const response = await api.post("/assets", assetMetadata);
+      console.log(assetMetadata, response.data);
+      setSearchResults([...searchResults, response.data.data]);
+      handleSearch();
       toggleUploadModal();
     } catch (error) {
       console.error(error);
@@ -45,7 +161,7 @@ export default function AssetMetadata({ cloudinaryData, toggleUploadModal }) {
   // console.log("Cloudinary Props >>>>>", cloudinaryData);
 
   return (
-    <form onChange={handleInput} onSubmit={handleSubmit} id="new-asset-metadata">
+    <form onSubmit={handleSubmit} id="new-asset-metadata">
       <div className="row">
         <div className="col-4 d-flex flex-column justify-content-center align-items-center">
           {cloudinaryData.bytes && (
@@ -68,14 +184,15 @@ export default function AssetMetadata({ cloudinaryData, toggleUploadModal }) {
               Type
             </label>
             <div className="col-sm-10">
-              <select name="type" className="custom-select custom-select-sm" id="type" value={assetMetadata.type}>
-                <option>Select a type of asset...</option>
-                <option value="Product Image">Product Image</option>
-                <option value="Video">Video</option>
-                <option value="Logo">Logo</option>
-                <option value="Presentation">Presentation</option>
-                <option value="Brand Guidelines">Brand Guidelines</option>
-              </select>
+              <Select
+                options={type}
+                onChange={handleSelect("type")}
+                name="type"
+                id="brand"
+                classNamePrefix="react-select"
+                theme={customTheme}
+                // value={assetMetadata.type}
+              />
             </div>
           </div>
           <div className="form-group row">
@@ -83,7 +200,15 @@ export default function AssetMetadata({ cloudinaryData, toggleUploadModal }) {
               Name
             </label>
             <div className="col-sm-10">
-              <input type="text" name="name" className="form-control form-control-sm" id="name" value={assetMetadata.name} />
+              <input
+                type="text"
+                name="name"
+                className="form-control form-control-sm"
+                id="name"
+                value={assetMetadata.name}
+                onChange={handleInput}
+                placeholder="Enter a descriptive name..."
+              />
             </div>
           </div>
           <div className="form-group row">
@@ -91,14 +216,23 @@ export default function AssetMetadata({ cloudinaryData, toggleUploadModal }) {
               Brand
             </label>
             <div className="col-sm-10">
-              <select name="meta_brand" className="custom-select custom-select-sm" id="brand" value={assetMetadata.meta_brand}>
+              {/* <select name="meta_brand" className="custom-select custom-select-sm" id="brand" value={assetMetadata.meta_brand}>
                 <option>Select a brand...</option>
                 <option value="Orangina">Orangina</option>
                 <option value="Schweppes">Schweppes</option>
                 <option value="Oasis">Oasis</option>
                 <option value="MayTea">MayTea</option>
                 <option value="Pulco">Pulco</option>
-              </select>
+              </select> */}
+              <Select
+                options={meta_brand}
+                onChange={handleSelect("meta_brand")}
+                name="meta_brand"
+                id="brand"
+                classNamePrefix="react-select"
+                theme={customTheme}
+                // value={assetMetadata.meta_brand}
+              />
             </div>
           </div>
           <div className="form-group row">
@@ -106,7 +240,15 @@ export default function AssetMetadata({ cloudinaryData, toggleUploadModal }) {
               Recipe
             </label>
             <div className="col-sm-10">
-              <input type="text" name="meta_recipe" className="form-control form-control-sm" id="recipe" value={assetMetadata.meta_recipe} />
+              <Select
+                options={recipes}
+                onChange={handleSelect("meta_recipe")}
+                name="meta_recipe"
+                id="brand"
+                classNamePrefix="react-select"
+                theme={customTheme}
+                // value={assetMetadata.meta_brand}
+              />
             </div>
           </div>
           <div className="form-group row">
@@ -114,7 +256,15 @@ export default function AssetMetadata({ cloudinaryData, toggleUploadModal }) {
               Flavour
             </label>
             <div className="col-sm-10">
-              <input type="text" name="meta_flavour" className="form-control form-control-sm" id="flavour" value={assetMetadata.meta_flavour} />
+              <Select
+                options={flavours}
+                onChange={handleSelect("meta_flavour")}
+                name="meta_flavour"
+                id="brand"
+                classNamePrefix="react-select"
+                theme={customTheme}
+                // value={assetMetadata.meta_brand}
+              />
             </div>
           </div>
         </div>
@@ -124,12 +274,21 @@ export default function AssetMetadata({ cloudinaryData, toggleUploadModal }) {
               Packaging
             </label>
             <div className="col-sm-9">
-              <select name="meta_packaging" className="custom-select custom-select-sm" id="packaging" value={assetMetadata.meta_packaging}>
+              {/* <select name="meta_packaging" className="custom-select custom-select-sm" id="packaging" value={assetMetadata.meta_packaging} onChange={handleInput}>
                 <option>Select a packaging...</option>
                 <option value="PET">PET</option>
                 <option value="CAN">CAN</option>
                 <option value="VERRE">VERRE</option>
-              </select>
+              </select> */}
+              <Select
+                options={meta_packaging}
+                onChange={handleSelect("meta_packaging")}
+                name="meta_packaging"
+                id="brand"
+                classNamePrefix="react-select"
+                theme={customTheme}
+                // value={assetMetadata.meta_packaging}
+              />
             </div>
           </div>
           <div className="form-group row">
@@ -137,16 +296,15 @@ export default function AssetMetadata({ cloudinaryData, toggleUploadModal }) {
               Capacity
             </label>
             <div className="col-sm-9">
-              <select name="meta_capacity" className="custom-select custom-select-sm" id="capacity" value={assetMetadata.meta_capacity}>
-                <option>Select a capacity...</option>
-                <option value="15cl">15cl</option>
-                <option value="25cl">25cl</option>
-                <option value="33cl">33cl</option>
-                <option value="50cl">50cl</option>
-                <option value="1l">1l</option>
-                <option value="1.5l">1.5l</option>
-                <option value="2l">2l</option>
-              </select>
+              <Select
+                options={meta_capacity}
+                onChange={handleSelect("meta_capacity")}
+                name="meta_capacity"
+                id="brand"
+                classNamePrefix="react-select"
+                theme={customTheme}
+                // value={assetMetadata.meta_capacity}
+              />
             </div>
           </div>
           <div className="form-group row">
@@ -154,12 +312,15 @@ export default function AssetMetadata({ cloudinaryData, toggleUploadModal }) {
               Format
             </label>
             <div className="col-sm-9">
-              <select name="meta_format" className="custom-select custom-select-sm" id="format" value={assetMetadata.meta_format}>
-                <option>Select a format...</option>
-                <option value="Standard">Standard</option>
-                <option value="Lot Gratuité">Lot Gratuité</option>
-                <option value="Lot Physique">Lot Physique</option>
-              </select>
+              <Select
+                options={meta_format}
+                onChange={handleSelect("meta_format")}
+                name="meta_format"
+                id="brand"
+                classNamePrefix="react-select"
+                theme={customTheme}
+                // value={assetMetadata.meta_format}
+              />
             </div>
           </div>
           <div className="form-group row">
@@ -175,6 +336,7 @@ export default function AssetMetadata({ cloudinaryData, toggleUploadModal }) {
                 className="form-control form-control-sm"
                 id="meta_ean"
                 value={assetMetadata.meta_ean13}
+                onChange={handleInput}
               />
             </div>
           </div>
@@ -183,7 +345,16 @@ export default function AssetMetadata({ cloudinaryData, toggleUploadModal }) {
               Tags
             </label>
             <div className="col-sm-9">
-              <input type="text" name="meta_tags" className="form-control form-control-sm" id="tags" value={assetMetadata.meta_tags} />
+              <Select
+                options={tags}
+                isMulti
+                onChange={handleSelect("meta_tags")}
+                name="meta_tags"
+                id="meta_tags"
+                classNamePrefix="react-select"
+                theme={customTheme}
+                // value={assetMetadata.meta_format}
+              />
             </div>
           </div>
         </div>
