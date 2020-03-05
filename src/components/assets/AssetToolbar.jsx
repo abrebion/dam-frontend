@@ -1,37 +1,46 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UserContext from "../../authentication/UserContext";
+import api from "../../api/apiHandler";
 
-export default withRouter(function AssetToolbar({ userSelection, selectAll, clearAll, shareSelection, history, match }) {
+export default withRouter(function AssetToolbar({
+  userSelection,
+  selectAll,
+  clearAll,
+  shareSelection,
+  activeCollection,
+  setActiveCollection,
+  refreshActiveCollection,
+  addToActiveCollection,
+  removeFromActiveCollection,
+  match
+}) {
   const userContext = useContext(UserContext);
   const { currentUser } = userContext;
-  const activeCollection = match.params.id;
-  const getCollectionDetails = collection => {
-    if (currentUser && currentUser.collections) {
-      const activeCollectionDetails = currentUser.collections.find(el => el._id === collection);
-      console.log("Active Collection", activeCollectionDetails);
-      return activeCollectionDetails;
-    }
-  };
-  getCollectionDetails(activeCollection);
+
+  // useEffect(() => {
+  //   if (match.params.id && currentUser && currentUser.collections) {
+  //     setActiveCollection(currentUser.collections.find(el => el._id === match.params.id));
+  //   }
+  // }, []);
 
   return (
     <React.Fragment>
-      {activeCollection && currentUser && currentUser.collections && (
+      {activeCollection && (
         <div className="active-collection-toolbar mb-2 text-muted small">
           <ul>
             <li>
               You're editing:{" "}
               <strong>
-                <em>{getCollectionDetails(activeCollection).name}</em>
+                <em>{activeCollection.name}</em>
               </strong>
             </li>
           </ul>
           <ul>
-            <li>
+            <li onClick={refreshActiveCollection}>
               <FontAwesomeIcon icon="sync-alt" />
-              <span>Refresh Collection [{getCollectionDetails(activeCollection).assets.length} files]</span>
+              <span>Refresh Collection [{activeCollection.assets.length} files]</span>
             </li>
             <li>
               <FontAwesomeIcon icon="download" />
@@ -59,13 +68,13 @@ export default withRouter(function AssetToolbar({ userSelection, selectAll, clea
             <span>{userSelection.length} Selected</span>
           </li>
         </ul>
-        {activeCollection && currentUser && currentUser.collections ? (
+        {activeCollection ? (
           <ul>
-            <li className={!userSelection.length ? "inactive-link" : undefined}>
+            <li className={!userSelection.length ? "inactive-link" : undefined} onClick={userSelection.length ? () => addToActiveCollection(userSelection) : undefined}>
               <FontAwesomeIcon icon="folder-plus" />
               <span>Add Selection to Collection</span>
             </li>
-            <li className={!userSelection.length ? "inactive-link" : undefined}>
+            <li className={!userSelection.length ? "inactive-link" : undefined} onClick={userSelection.length ? () => removeFromActiveCollection(userSelection) : undefined}>
               <FontAwesomeIcon icon="folder-minus" />
               <span>Remove Selection from Collection</span>
             </li>

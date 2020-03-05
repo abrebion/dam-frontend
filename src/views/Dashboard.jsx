@@ -7,31 +7,37 @@ import UserContext from "../authentication/UserContext";
 import api from "../api/apiHandler";
 import { generateArchive } from "../helpers/cloudinary";
 
-export default function Dashboard({ toggleUploadModal, history, match }) {
+export default function Dashboard({ toggleUploadModal, match }) {
   const [searchResults, setSearchResults] = useState([]);
   const [userSelection, setUserSelection] = useState([]);
   const [userFeedback, setUserFeedback] = useState("");
   const userContext = useContext(UserContext);
   const { currentUser, setCurrentUser } = userContext;
+  const [activeCollection, setActiveCollection] = useState(null);
 
-  const activeCollection = match.params.id;
-  // console.log("Active Collection", activeCollection);
+  // useEffect(() => {
+  //   if (match.params.id) {
+  //     api
+  //       .get("/collections/" + match.params.id + "/assets")
+  //       .then(res => {
+  //         setSearchResults(res.data.assets);
+  //       })
+  //       .catch(err => {
+  //         console.error(err);
+  //       });
+  //   }
+  // }, []);
 
   useEffect(() => {
-    api
-      .get("/collections/" + match.params.id + "/assets")
-      .then(res => {
-        setSearchResults(res.data.assets);
-      })
-      .catch(err => {
-        console.error(err);
-      });
+    if (match.params.id && currentUser && currentUser.collections) {
+      const activeCollectionDetails = currentUser.collections.find(el => el._id === match.params.id);
+      setActiveCollection(activeCollectionDetails);
+    }
   }, [match.params.id]);
 
-  const handleSearch = async url => {
+  const handleSearch = async (url = "/assets/search?sort=-createdAt") => {
     try {
       if (url) {
-        // console.log("You performed a search to: ", url);
         const results = await api.get(url);
         setSearchResults(results.data);
       }
@@ -101,6 +107,37 @@ export default function Dashboard({ toggleUploadModal, history, match }) {
     }
   };
 
+  const addToActiveCollection = async assets => {
+    try {
+      const response = await api.post("/collections/" + match.params.id + "/assets/add", assets);
+      console.log(response.data);
+      setActiveCollection(response.data);
+      clearAll();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const removeFromActiveCollection = async assets => {
+    try {
+      const response = await api.post("/collections/" + match.params.id + "/assets/delete", assets);
+      console.log(response.data);
+      setActiveCollection(response.data);
+      clearAll();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const refreshActiveCollection = async () => {
+    try {
+      const response = await api.get("/collections/" + match.params.id + "/assets");
+      setSearchResults(response.data.assets);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="container-fluid">
       <Header toggleUploadModal={toggleUploadModal} userFeedback={userFeedback} setUserFeedback={setUserFeedback} />
@@ -109,7 +146,17 @@ export default function Dashboard({ toggleUploadModal, history, match }) {
           <Search handleSearch={handleSearch} />
         </div>
         <div className="col-9">
-          <AssetToolbar userSelection={userSelection} selectAll={selectAll} clearAll={clearAll} shareSelection={shareSelection} />
+          <AssetToolbar
+            userSelection={userSelection}
+            selectAll={selectAll}
+            clearAll={clearAll}
+            shareSelection={shareSelection}
+            activeCollection={activeCollection}
+            setActiveCollection={setActiveCollection}
+            refreshActiveCollection={refreshActiveCollection}
+            addToActiveCollection={addToActiveCollection}
+            removeFromActiveCollection={removeFromActiveCollection}
+          />
           <AssetList assets={searchResults} userSelection={userSelection} updateUserSelection={updateUserSelection} handleAssetDelete={handleAssetDelete} />
         </div>
       </div>

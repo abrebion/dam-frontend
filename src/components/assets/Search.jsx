@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { withRouter } from "react-router-dom";
 import Select from "react-select";
 import AsyncSelect from "react-select/async";
 import makeAnimated from "react-select/animated";
@@ -60,7 +61,7 @@ const customTheme = theme => {
   };
 };
 
-export default function Search({ handleSearch }) {
+export default withRouter(function Search({ handleSearch, match }) {
   const [nameSelect, setNameSelect] = useState("");
   const [recipes, setRecipes] = useState([]);
   const [flavours, setFlavours] = useState([]);
@@ -75,6 +76,7 @@ export default function Search({ handleSearch }) {
   const [formatSelect, setFormatSelect] = useState([]);
   const [tagsSelect, setTagsSelect] = useState([]);
   const [eanSelect, setEanSelect] = useState([]);
+  // const [initialView, setInitialView] = useState(true);
 
   const refreshResults = meta => {
     return selectedOptions => {
@@ -128,6 +130,7 @@ export default function Search({ handleSearch }) {
         return;
       }
       setSearchQuery({ ...searchQuery, [selectedOptions[0].meta]: selectedOptions.map(el => el.value) });
+      // setInitialView(false);
     };
   };
 
@@ -395,4 +398,4 @@ export default function Search({ handleSearch }) {
       </div>
     </div>
   );
-}
+});
