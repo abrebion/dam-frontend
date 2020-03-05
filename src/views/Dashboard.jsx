@@ -17,7 +17,18 @@ export default function Dashboard({ toggleUploadModal, history, match }) {
   const activeCollection = match.params.id;
   // console.log("Active Collection", activeCollection);
 
-  const handleSearch = async (url = "/assets/search?") => {
+  useEffect(() => {
+    api
+      .get("/collections/" + match.params.id + "/assets")
+      .then(res => {
+        setSearchResults(res.data.assets);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }, [match.params.id]);
+
+  const handleSearch = async url => {
     try {
       if (url) {
         // console.log("You performed a search to: ", url);

@@ -9,7 +9,7 @@ const CustomLogo = styled.img`
 
 export default function CroppedLogo(props) {
   return (
-    <div>
+    <div className="text-center">
       <Link to="/">
         <CustomLogo src={croppedLogo} alt="Orangina Suntory France - DAM" {...props} />
       </Link>

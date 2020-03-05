@@ -310,6 +310,47 @@ body {
     }
 }
 
+.active-collection-toolbar {
+    border: 1px solid rgba($black, .125);
+    border-radius: 0.25rem;
+    font-size: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: rgba(0, 118, 150, 0.15);
+
+    ul {
+        display: flex;
+        list-style: none;
+        padding: 10px 10px;
+        margin-bottom: 0;
+
+        >li {
+            cursor: pointer;
+
+            @media (min-width: 576px) {
+                margin-right: 1rem;
+            }
+
+            &:last-child {
+                margin-right: 0;
+            }
+
+            &:hover {
+                color: $primary;
+            }
+
+        }
+
+    }
+
+    span {
+        margin-left: .5rem;
+        margin-right: .5rem;
+    }
+}
+
 .link {
     color: inherit;
 

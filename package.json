@@ -1,7 +1,10 @@
 {
-  "name": "frontend",
+  "name": "orangina-dam-frontend",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "10.17.0"
+  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-regular-svg-icons": "^5.12.1",

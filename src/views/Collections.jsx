@@ -63,7 +63,7 @@ export default function Collections() {
           <CollectionToolbar />
         </div>
         <div className="col-12">
-          <CollectionList collections={currentUser.collections ? currentUser.collections : []} handleDelete={handleDelete} handleShare={handleShare} />
+          <CollectionList collections={currentUser && currentUser.collections ? currentUser.collections : []} handleDelete={handleDelete} handleShare={handleShare} />
         </div>
       </div>
     </div>
