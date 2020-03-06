@@ -30,7 +30,7 @@ export default function Header({ userFeedback, setUserFeedback, toggleUploadModa
             <div className="alert alert-success alert-dismissible mb-0 mt-3 mt-lg-0 small" role="alert">
               A link to access this archive has been generated. It's valid for 7 days.
               <br />
-              <a href="" onClick={closeUserFeebackAlert}>
+              <a href="/" onClick={closeUserFeebackAlert}>
                 <FontAwesomeIcon icon="copy" />
                 &nbsp;<clipboard-copy value={userFeedback}>Copy to clipboard.</clipboard-copy>
               </a>

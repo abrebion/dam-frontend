@@ -34,8 +34,8 @@ export default function AssetPanel({ asset, handleTogglePanel, handleSearch }) {
   });
 
   const [mode, setMode] = useState("edit");
-  const [recipes, setRecipes] = useState([]);
-  const [flavours, setFlavours] = useState([]);
+  const [setRecipes] = useState([]);
+  const [setFlavours] = useState([]);
   const [tags, setTags] = useState([]);
   const [defaultTags, setDefaultTags] = useState([]);
 

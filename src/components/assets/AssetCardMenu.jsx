@@ -6,7 +6,7 @@ import "@github/clipboard-copy-element";
 
 export default function AssetCardMenu({ asset, handleToggleEditMenu, handleTogglePanel, handleAssetDelete }) {
   const menu = useRef(null);
-  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
+  const { width: windowWidth } = useWindowDimensions();
   const [menuClass, setMenuClass] = useState("");
   const userContext = useContext(UserContext);
   const { currentUser } = userContext;
@@ -130,10 +130,10 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
         <FontAwesomeIcon icon="link" />
         <clipboard-copy value={asset.secure_url}>Copy URL</clipboard-copy>
       </span>
-      <span>
+      {/* <span>
         <FontAwesomeIcon icon="folder-plus" />
         Add to Collection
-      </span>
+      </span> */}
       {currentUser.role !== "user" && (
         <span onClick={() => handleAssetDelete(asset._id)}>
           <FontAwesomeIcon icon="trash-alt" />

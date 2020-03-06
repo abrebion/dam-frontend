@@ -158,6 +158,11 @@ export default function AssetMetadata({ cloudinaryData, toggleUploadModal, handl
     }
   };
 
+  const setAspectRatioClass = (width, height) => {
+    if (width > height) return "landscape";
+    return "portrait";
+  };
+
   // console.log("Cloudinary Props >>>>>", cloudinaryData);
 
   return (
@@ -165,17 +170,23 @@ export default function AssetMetadata({ cloudinaryData, toggleUploadModal, handl
       <div className="row">
         <div className="col-4 d-flex flex-column justify-content-center align-items-center">
           {cloudinaryData.bytes && (
-            <div className="small text-muted">
-              <img src={cloudinaryData.secure_url} alt="" className="img-fluid" />
-              <small className="d-block">
-                File details: .{cloudinaryData.format}, {cloudinaryData.width}x{cloudinaryData.height} pixels, {formatBytes(cloudinaryData.bytes)}
-              </small>
-              <small className="d-block">
-                Fill in additional data to make it searchable.
-                <br />
-                Don't worry, you'll be able to edit this later as well.
-              </small>
-            </div>
+            <React.Fragment>
+              <img
+                src={cloudinaryData.secure_url.replace("/image/upload/", "/image/upload/h_300/")}
+                alt=""
+                className={"upload-" + setAspectRatioClass(cloudinaryData.width, cloudinaryData.height)}
+              />
+              <div className="small text-muted">
+                <small className="d-block">
+                  File details: .{cloudinaryData.format}, {cloudinaryData.width}x{cloudinaryData.height} pixels, {formatBytes(cloudinaryData.bytes)}
+                </small>
+                <small className="d-block">
+                  Fill in additional data to make it searchable.
+                  <br />
+                  Don't worry, you'll be able to edit this later as well.
+                </small>
+              </div>
+            </React.Fragment>
           )}
         </div>
         <div className="col-4">

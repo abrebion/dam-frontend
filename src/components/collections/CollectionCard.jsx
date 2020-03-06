@@ -31,7 +31,7 @@ export default function CollectionCard({ collection, handleDelete, handleShare }
                 <span>Created</span> <span>{moment(collection.createdAt).format("LL")}</span>
               </div>
               <div className="d-flex justify-content-between">
-                <span> Updated</span>
+                <span>Updated</span>
                 <span>
                   {moment(collection.updatedAt)
                     .startOf("day")

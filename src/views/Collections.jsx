@@ -6,7 +6,7 @@ import UserContext from "../authentication/UserContext";
 import api from "../api/apiHandler";
 import { generateArchive } from "../helpers/cloudinary";
 
-export default function Collections() {
+export default function Collections({ toggleUploadModal }) {
   const userContext = useContext(UserContext);
   const { currentUser, setCurrentUser } = userContext;
   const [userFeedback, setUserFeedback] = useState("");
@@ -57,7 +57,7 @@ export default function Collections() {
 
   return (
     <div className="container-fluid">
-      <Header userFeedback={userFeedback} setUserFeedback={setUserFeedback} />
+      <Header toggleUploadModal={toggleUploadModal} userFeedback={userFeedback} setUserFeedback={setUserFeedback} />
       <div className="row">
         <div className="col-12">
           <CollectionToolbar />

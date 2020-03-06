@@ -1,8 +1,7 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UserContext from "../../authentication/UserContext";
-import api from "../../api/apiHandler";
 
 export default withRouter(function AssetToolbar({
   userSelection,
@@ -88,12 +87,12 @@ export default withRouter(function AssetToolbar({
               </li>
               <li onClick={userSelection.length ? () => shareSelection("download") : undefined} className={!userSelection.length ? "inactive-link" : undefined}>
                 <FontAwesomeIcon icon={["far", "file-archive"]} />
-                <span>Get Shareable Link</span>
+                <span>Get Shareable URL</span>
               </li>
-              <li className={!userSelection.length ? "inactive-link" : undefined}>
+              {/* <li className={!userSelection.length ? "inactive-link" : undefined}>
                 <FontAwesomeIcon icon="folder-plus" />
                 <span>Add to Collection</span>
-              </li>
+              </li> */}
             </ul>
             {currentUser && currentUser.role !== "user" && (
               <ul>

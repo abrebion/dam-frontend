@@ -11,21 +11,8 @@ export default function Dashboard({ searchResults, setSearchResults, handleSearc
   const [userSelection, setUserSelection] = useState([]);
   const [userFeedback, setUserFeedback] = useState("");
   const userContext = useContext(UserContext);
-  const { currentUser, setCurrentUser } = userContext;
+  const { currentUser } = userContext;
   const [activeCollection, setActiveCollection] = useState(null);
-
-  // useEffect(() => {
-  //   if (match.params.id) {
-  //     api
-  //       .get("/collections/" + match.params.id + "/assets")
-  //       .then(res => {
-  //         setSearchResults(res.data.assets);
-  //       })
-  //       .catch(err => {
-  //         console.error(err);
-  //       });
-  //   }
-  // }, []);
 
   useEffect(() => {
     if (match.params.id && currentUser && currentUser.collections) {
@@ -125,6 +112,22 @@ export default function Dashboard({ searchResults, setSearchResults, handleSearc
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    if (match.params.id) {
+      api
+        .get("/collections/" + match.params.id + "/assets")
+        .then(res => {
+          setSearchResults(res.data.assets);
+          // setTimeout(() => {
+          //   setSearchResults(res.data.assets);
+          // }, 10);
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    }
+  }, []);
 
   return (
     <div className="container-fluid">
