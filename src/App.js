@@ -14,33 +14,16 @@ import Register from "./views/Register";
 import Dashboard from "./views/Dashboard";
 import Collections from "./views/Collections";
 import NewAssetModal from "./components/assets/NewAssetModal";
-import api from "./api/apiHandler";
+// Redux Store
+import { connect } from "react-redux";
 
-export default function App() {
+const App = ({ uploaderIsVisible }) => {
   const { isLoading } = useAuth();
   const [currentUser, setCurrentUser] = useState({});
   const UserContextValue = {
     currentUser,
-    setCurrentUser
+    setCurrentUser,
   };
-  const [searchResults, setSearchResults] = useState([]);
-  const [showUploader, setUploaderVisibility] = useState(false);
-
-  const handleSearch = async (url = "/assets/search?sort=-createdAt") => {
-    try {
-      if (url) {
-        const results = await api.get(url);
-        setSearchResults(results.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const toggleUploadModal = e => {
-    return setUploaderVisibility(!showUploader);
-  };
-
   return (
     <UserContext.Provider value={UserContextValue}>
       {isLoading ? null : (
@@ -49,35 +32,21 @@ export default function App() {
           <Route exact path="/register" component={Register} />
           <Route exact path="/request-access" component={RequestAccess} />
           <Route exact path="/reset-password" component={ResetPassword} />
-          <Route exact path="/first-connection" render={props => <ResetPassword {...props} firstConnection={true} />} />
-          <ProtectedRoute
-            exact
-            path="/dashboard"
-            component={Dashboard}
-            toggleUploadModal={toggleUploadModal}
-            searchResults={searchResults}
-            setSearchResults={setSearchResults}
-            handleSearch={handleSearch}
-          />
-          <ProtectedRoute
-            path="/dashboard/:id"
-            component={Dashboard}
-            toggleUploadModal={toggleUploadModal}
-            searchResults={searchResults}
-            setSearchResults={setSearchResults}
-            handleSearch={handleSearch}
-          />
-          <ProtectedRoute
-            exact
-            path="/collections"
-            component={Collections}
-            toggleUploadModal={toggleUploadModal}
-            searchResults={searchResults}
-            setSearchResults={setSearchResults}
-          />
+          <Route exact path="/first-connection" render={(props) => <ResetPassword {...props} firstConnection={true} />} />
+          <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+          <ProtectedRoute path="/dashboard/:id" component={Dashboard} />
+          <ProtectedRoute exact path="/collections" component={Collections} />
         </Switch>
       )}
-      {showUploader && <NewAssetModal toggleUploadModal={toggleUploadModal} handleSearch={handleSearch} searchResults={searchResults} setSearchResults={setSearchResults} />}
+      {uploaderIsVisible && <NewAssetModal />}
     </UserContext.Provider>
   );
-}
+};
+
+const mapStateToProps = (state) => {
+  return {
+    uploaderIsVisible: state.assets.uploaderIsVisible,
+  };
+};
+
+export default connect(mapStateToProps)(App);

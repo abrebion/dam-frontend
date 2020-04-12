@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import AssetUploader from "./AssetUploader";
+// Redux Store
+import { connect } from "react-redux";
+import { toogleUploader } from "../../redux/actions/assets";
 
-export default function NewAssetModal({ toggleUploadModal, searchResults, setSearchResults, handleSearch }) {
+const NewAssetModal = ({ toggleUploadModal }) => {
   const [showSaveButton, setShowSaveButton] = useState(false);
   const toggleSaveButton = () => {
     setShowSaveButton(true);
@@ -20,14 +23,7 @@ export default function NewAssetModal({ toggleUploadModal, searchResults, setSea
               </button>
             </div>
             <div className="modal-body">
-              <AssetUploader
-                toggleSaveButton={toggleSaveButton}
-                toggleUploadModal={toggleUploadModal}
-                searchResults={searchResults}
-                setSearchResults={setSearchResults}
-                handleSearch={handleSearch}
-                mode="add"
-              />
+              <AssetUploader toggleSaveButton={toggleSaveButton} toggleUploadModal={toggleUploadModal} mode="add" />
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={toggleUploadModal}>
@@ -44,4 +40,10 @@ export default function NewAssetModal({ toggleUploadModal, searchResults, setSea
       </div>
     </div>
   );
-}
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  toggleUploadModal: () => dispatch(toogleUploader()),
+});
+
+export default connect(undefined, mapDispatchToProps)(NewAssetModal);

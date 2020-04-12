@@ -1,8 +1,10 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../../authentication/UserContext";
+import { connect } from "react-redux";
+import { toogleUploader } from "../../redux/actions/assets";
 
-export default function Navigation({ toggleUploadModal }) {
+const Navigation = ({ toggleUploadModal }) => {
   const userContext = useContext(UserContext);
   const { currentUser } = userContext;
 
@@ -25,4 +27,10 @@ export default function Navigation({ toggleUploadModal }) {
       )}
     </div>
   );
-}
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  toggleUploadModal: () => dispatch(toogleUploader()),
+});
+
+export default connect(undefined, mapDispatchToProps)(Navigation);

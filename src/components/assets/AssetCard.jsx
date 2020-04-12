@@ -2,15 +2,17 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import formatBytes from "../../helpers/formatBytes";
 import AssetCardMenu from "./AssetCardMenu";
+import { addToSelection, removeFromSelection } from "../../redux/actions/selection";
+import { connect } from "react-redux";
 
-export default function AssetCard({ asset, isSelected, updateUserSelection, handleTogglePanel, handleAssetDelete }) {
+const AssetCard = ({ asset, isSelected, updateUserSelection, handleTogglePanel, handleAssetDelete, select }) => {
   const [toggleSelect, setToggleSelect] = useState(isSelected);
   const [toggleEditMenu, setToggleEditMenu] = useState(false);
   const handleToggleSelect = () => {
     setToggleSelect(!toggleSelect);
     updateUserSelection(asset);
   };
-  const handleToggleEditMenu = asset => {
+  const handleToggleEditMenu = (asset) => {
     setToggleEditMenu(!toggleEditMenu);
   };
 
@@ -33,9 +35,9 @@ export default function AssetCard({ asset, isSelected, updateUserSelection, hand
         <div className="card">
           <div className="card-select-btn">
             {toggleSelect === false ? (
-              <FontAwesomeIcon icon={["far", "square"]} onClick={handleToggleSelect} />
+              <FontAwesomeIcon icon={["far", "square"]} onClick={select} />
             ) : (
-              <FontAwesomeIcon icon={["fa", "check-square"]} onClick={handleToggleSelect} className="card-select-on" />
+              <FontAwesomeIcon icon={["fa", "check-square"]} onClick={select} className="card-select-on" />
             )}
           </div>
           <div className="card-menu-btn">
@@ -69,4 +71,21 @@ export default function AssetCard({ asset, isSelected, updateUserSelection, hand
       </div>
     </>
   );
-}
+};
+
+const mapStateToProps = (state) => {
+  return {
+    selection: state.selection,
+  };
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    select: () => {
+      if (!ownProps.isSelected) dispatch(addToSelection(ownProps.asset));
+      else dispatch(removeFromSelection(ownProps.asset));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AssetCard);

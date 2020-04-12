@@ -16,16 +16,16 @@ export default function Dashboard({ searchResults, setSearchResults, handleSearc
 
   useEffect(() => {
     if (match.params.id && currentUser && currentUser.collections) {
-      const activeCollectionDetails = currentUser.collections.find(el => el._id === match.params.id);
+      const activeCollectionDetails = currentUser.collections.find((el) => el._id === match.params.id);
       setActiveCollection(activeCollectionDetails);
     }
   }, [match.params.id]);
 
-  const handleAssetDelete = async id => {
+  const handleAssetDelete = async (id) => {
     try {
       // console.log("You are about to delete the asset ", id);
       await api.delete("/assets/" + id);
-      setSearchResults(searchResults.filter(el => el._id !== id));
+      setSearchResults(searchResults.filter((el) => el._id !== id));
     } catch (error) {
       console.log(error);
     }
@@ -40,8 +40,8 @@ export default function Dashboard({ searchResults, setSearchResults, handleSearc
     // console.log("All files cleared");
   };
 
-  const updateUserSelection = asset => {
-    const j = userSelection.findIndex(el => asset._id === el._id);
+  const updateUserSelection = (asset) => {
+    const j = userSelection.findIndex((el) => asset._id === el._id);
     if (j !== -1) {
       // Asset is already in the array, remove it
       userSelection.splice(j, 1);
@@ -52,8 +52,8 @@ export default function Dashboard({ searchResults, setSearchResults, handleSearc
   };
 
   const downloadArchive = async (url, name) => {
-    let blob = await fetch(url).then(r => r.blob());
-    let dataUrl = await new Promise(resolve => {
+    let blob = await fetch(url).then((r) => r.blob());
+    let dataUrl = await new Promise((resolve) => {
       let reader = new FileReader();
       reader.onload = () => resolve(reader.result);
       reader.readAsDataURL(blob);
@@ -66,9 +66,9 @@ export default function Dashboard({ searchResults, setSearchResults, handleSearc
     document.body.removeChild(link);
   };
 
-  const shareSelection = async mode => {
+  const shareSelection = async (mode) => {
     // console.log("User wants to share the following files: ", userSelection);
-    const public_ids = userSelection.map(el => el.public_id);
+    const public_ids = userSelection.map((el) => el.public_id);
     try {
       const response = await generateArchive(public_ids, mode);
       if (mode === "create") {
@@ -82,7 +82,7 @@ export default function Dashboard({ searchResults, setSearchResults, handleSearc
     }
   };
 
-  const addToActiveCollection = async assets => {
+  const addToActiveCollection = async (assets) => {
     try {
       const response = await api.post("/collections/" + match.params.id + "/assets/add", assets);
       console.log(response.data);
@@ -93,7 +93,7 @@ export default function Dashboard({ searchResults, setSearchResults, handleSearc
     }
   };
 
-  const removeFromActiveCollection = async assets => {
+  const removeFromActiveCollection = async (assets) => {
     try {
       const response = await api.post("/collections/" + match.params.id + "/assets/delete", assets);
       console.log(response.data);
@@ -117,13 +117,13 @@ export default function Dashboard({ searchResults, setSearchResults, handleSearc
     if (match.params.id) {
       api
         .get("/collections/" + match.params.id + "/assets")
-        .then(res => {
+        .then((res) => {
           setSearchResults(res.data.assets);
           // setTimeout(() => {
           //   setSearchResults(res.data.assets);
           // }, 10);
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(err);
         });
     }
@@ -134,7 +134,7 @@ export default function Dashboard({ searchResults, setSearchResults, handleSearc
       <Header toggleUploadModal={toggleUploadModal} userFeedback={userFeedback} setUserFeedback={setUserFeedback} />
       <div className="row">
         <div className="col-3">
-          <Search handleSearch={handleSearch} />
+          <Search />
         </div>
         <div className="col-9">
           <AssetToolbar
@@ -149,11 +149,10 @@ export default function Dashboard({ searchResults, setSearchResults, handleSearc
             removeFromActiveCollection={removeFromActiveCollection}
           />
           <AssetList
-            assets={searchResults}
+            // assets={searchResults}
             userSelection={userSelection}
             updateUserSelection={updateUserSelection}
             handleAssetDelete={handleAssetDelete}
-            handleSearch={handleSearch}
           />
         </div>
       </div>

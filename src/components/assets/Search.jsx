@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { withRouter } from "react-router-dom";
 import Select from "react-select";
 import AsyncSelect from "react-select/async";
 import makeAnimated from "react-select/animated";
 import api from "../../api/apiHandler";
 import qs from "query-string";
+// Redux Store
+import { connect } from "react-redux";
+import { search } from "../../redux/actions/search";
 
 const animatedComponents = makeAnimated();
 
@@ -21,7 +23,7 @@ const meta_brand = [
   { value: "Pampryl", label: "Pampryl", meta: "meta_brand" },
   { value: "Ricqlès", label: "Ricqlès", meta: "meta_brand" },
   { value: "Brut de Pomme", label: "Brut de Pomme", meta: "meta_brand" },
-  { value: "Banga", label: "Banga", meta: "meta_brand" }
+  { value: "Banga", label: "Banga", meta: "meta_brand" },
 ];
 
 const meta_capacity = [
@@ -33,35 +35,35 @@ const meta_capacity = [
   { value: "33cl", label: "33cl", meta: "meta_capacity" },
   { value: "25cl", label: "25cl", meta: "meta_capacity" },
   { value: "20cl", label: "20cl", meta: "meta_capacity" },
-  { value: "15cl", label: "15cl", meta: "meta_capacity" }
+  { value: "15cl", label: "15cl", meta: "meta_capacity" },
 ];
 
 const meta_packaging = [
   { value: "PET", label: "PET", meta: "meta_packaging" },
   { value: "CAN", label: "CAN", meta: "meta_packaging" },
-  { value: "VERRE", label: "VERRE", meta: "meta_packaging" }
+  { value: "VERRE", label: "VERRE", meta: "meta_packaging" },
 ];
 
 const meta_format = [
   { value: "Standard", label: "Standard", meta: "meta_format" },
   { value: "Lot Gratuité", label: "Lot Gratuité", meta: "meta_format" },
-  { value: "Lot Physique", label: "Lot Physique", meta: "meta_format" }
+  { value: "Lot Physique", label: "Lot Physique", meta: "meta_format" },
 ];
 
-const customTheme = theme => {
+const customTheme = (theme) => {
   return {
     ...theme,
     colors: {
       ...theme.colors,
-      primary: "#007696" // active option
+      primary: "#007696", // active option
       // primary25: "#b4ebfa", // rollover on option
       // primary50: "#a2dff0", // click on option
       // danger: "#ce071c"
-    }
+    },
   };
 };
 
-export default withRouter(function Search({ handleSearch, match }) {
+const Search = ({ handleSearch }) => {
   const [nameSelect, setNameSelect] = useState("");
   const [recipes, setRecipes] = useState([]);
   const [flavours, setFlavours] = useState([]);
@@ -78,8 +80,8 @@ export default withRouter(function Search({ handleSearch, match }) {
   const [eanSelect, setEanSelect] = useState([]);
   // const [initialView, setInitialView] = useState(true);
 
-  const refreshResults = meta => {
-    return selectedOptions => {
+  const refreshResults = (meta) => {
+    return (selectedOptions) => {
       // console.log("Meta:", meta, ">>>>", selectedOptions);
       switch (meta) {
         case "name":
@@ -129,7 +131,7 @@ export default withRouter(function Search({ handleSearch, match }) {
         setSearchQuery({ ...searchQuery, [meta]: null });
         return;
       }
-      setSearchQuery({ ...searchQuery, [selectedOptions[0].meta]: selectedOptions.map(el => el.value) });
+      setSearchQuery({ ...searchQuery, [selectedOptions[0].meta]: selectedOptions.map((el) => el.value) });
       // setInitialView(false);
     };
   };
@@ -137,10 +139,10 @@ export default withRouter(function Search({ handleSearch, match }) {
   const loadAsyncNames = async (inputValue, callback) => {
     try {
       const fetchedNames = await api.get("/assets");
-      const returnedNames = fetchedNames.data.map(el => {
+      const returnedNames = fetchedNames.data.map((el) => {
         return { value: el.name, label: el.name, meta: "name" };
       });
-      const filteredNames = returnedNames.filter(el => el.label.match(new RegExp(inputValue, "gi")));
+      const filteredNames = returnedNames.filter((el) => el.label.match(new RegExp(inputValue, "gi")));
       // console.log(filteredNames);
       callback(filteredNames);
     } catch (error) {
@@ -156,7 +158,7 @@ export default withRouter(function Search({ handleSearch, match }) {
     async function fetchTags() {
       try {
         const fetchedTags = await api.get("/tags");
-        const tags = fetchedTags.data.map(el => {
+        const tags = fetchedTags.data.map((el) => {
           return { value: el._id, label: el.name, meta: "meta_tags" };
         });
         setTags(tags);
@@ -167,7 +169,7 @@ export default withRouter(function Search({ handleSearch, match }) {
     async function fetchRecipes() {
       try {
         const fetchedRecipes = await api.get("/assets/recipes");
-        const recipes = fetchedRecipes.data.map(el => {
+        const recipes = fetchedRecipes.data.map((el) => {
           return { value: el, label: el, meta: "meta_recipe" };
         });
         setRecipes(recipes);
@@ -178,7 +180,7 @@ export default withRouter(function Search({ handleSearch, match }) {
     async function fetchFlavours() {
       try {
         const fetchedFlavours = await api.get("/assets/flavours");
-        const flavours = fetchedFlavours.data.map(el => {
+        const flavours = fetchedFlavours.data.map((el) => {
           return { value: el, label: el, meta: "meta_flavour" };
         });
         setFlavours(flavours);
@@ -189,7 +191,7 @@ export default withRouter(function Search({ handleSearch, match }) {
     async function fetchEANs() {
       try {
         const fetchedEANs = await api.get("/assets/eans");
-        const eans = fetchedEANs.data.map(el => {
+        const eans = fetchedEANs.data.map((el) => {
           return { value: el, label: el, meta: "meta_ean13" };
         });
         setEANs(eans);
@@ -203,12 +205,12 @@ export default withRouter(function Search({ handleSearch, match }) {
     fetchEANs();
   }, []);
 
-  const handleNameChange = newValue => {
+  const handleNameChange = (newValue) => {
     setNameSelect({ newValue });
     return newValue;
   };
 
-  const handleResetFilters = e => {
+  const handleResetFilters = (e) => {
     e.preventDefault();
     setNameSelect(null);
     setBrandSelect(null);
@@ -398,4 +400,19 @@ export default withRouter(function Search({ handleSearch, match }) {
       </div>
     </div>
   );
-});
+};
+
+const mapStateToProps = (state) => {
+  return {
+    searchResults: state.search.results,
+    searchLoading: state.search.loading,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    handleSearch: (url) => dispatch(search(url)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Search);

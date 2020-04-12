@@ -2,8 +2,10 @@ import React, { useContext } from "react";
 import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UserContext from "../../authentication/UserContext";
+import { connect } from "react-redux";
+import { addAllToSelection, removeAllFromSelection } from "../../redux/actions/selection";
 
-export default withRouter(function AssetToolbar({
+const AssetToolbar = ({
   userSelection,
   selectAll,
   clearAll,
@@ -13,8 +15,9 @@ export default withRouter(function AssetToolbar({
   refreshActiveCollection,
   addToActiveCollection,
   removeFromActiveCollection,
-  match
-}) {
+  match,
+  assets,
+}) => {
   const userContext = useContext(UserContext);
   const { currentUser } = userContext;
 
@@ -54,7 +57,7 @@ export default withRouter(function AssetToolbar({
       )}
       <div className="asset-toolbar mb-4 text-muted" style={{ backgroundColor: "white" }}>
         <ul>
-          <li onClick={selectAll}>
+          <li onClick={() => selectAll(assets)}>
             <FontAwesomeIcon icon={["far", "plus-square"]} />
             <span>Select All</span>
           </li>
@@ -111,4 +114,25 @@ export default withRouter(function AssetToolbar({
       </div>
     </React.Fragment>
   );
-});
+};
+
+const mapStateToProps = (state) => {
+  return {
+    assets: state.assets,
+    selection: state.selection,
+    search: state.search,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    selectAll: (assets) => {
+      dispatch(addAllToSelection(assets));
+    },
+    clearAll: () => {
+      dispatch(removeAllFromSelection());
+    },
+  };
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AssetToolbar));
