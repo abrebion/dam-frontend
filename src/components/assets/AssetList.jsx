@@ -4,8 +4,7 @@ import AssetPanel from "./AssetPanel";
 import NoResults from "./NoResults";
 import { connect } from "react-redux";
 
-const AssetList = ({ searchResults, userSelection, updateUserSelection, handleAssetDelete }) => {
-  // console.log("User Selection", userSelection);
+const AssetList = ({ searchResults, currentAsset, userSelection, updateUserSelection }) => {
   const isSelected = (asset) => !!userSelection.filter((el) => el._id === asset._id).length;
   const [togglePanel, setTogglePanel] = useState(false);
   const [activeAsset, setActiveAsset] = useState(null);
@@ -20,20 +19,13 @@ const AssetList = ({ searchResults, userSelection, updateUserSelection, handleAs
       {searchResults && searchResults.length ? (
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4">
           {searchResults.map((asset, i) => (
-            <AssetCard
-              key={i}
-              asset={asset}
-              isSelected={isSelected(asset)}
-              updateUserSelection={updateUserSelection}
-              handleTogglePanel={handleTogglePanel}
-              handleAssetDelete={handleAssetDelete}
-            />
+            <AssetCard key={i} asset={asset} isSelected={isSelected(asset)} updateUserSelection={updateUserSelection} handleTogglePanel={handleTogglePanel} />
           ))}
         </div>
       ) : (
         <NoResults />
       )}
-      {togglePanel && (
+      {Object.keys(currentAsset).length !== 0 && (
         <AssetPanel
           asset={activeAsset}
           handleTogglePanel={(e) => {
@@ -50,6 +42,7 @@ const mapStateToProps = (state) => {
   return {
     searchResults: state.search.results,
     searchLoading: state.search.loading,
+    currentAsset: state.assets.currentAsset,
   };
 };
 

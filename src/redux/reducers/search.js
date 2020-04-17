@@ -1,4 +1,4 @@
-import { SEARCH_INITIATE, SEARCH_COMPLETE, SEARCH_FAILURE, SEARCH_RESET } from "../actionTypes";
+import { SEARCH_INITIATE, SEARCH_COMPLETE, SEARCH_FAILURE, SEARCH_REFRESH, SEARCH_RESET } from "../actionTypes";
 
 const initialState = {
   results: [],
@@ -26,6 +26,11 @@ const searchReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.error,
+      };
+    case SEARCH_REFRESH:
+      return {
+        ...state,
+        results: state.results.filter(({ _id }) => _id !== action.id),
       };
     case SEARCH_RESET:
       return initialState;

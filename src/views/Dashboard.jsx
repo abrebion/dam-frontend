@@ -7,7 +7,7 @@ import UserContext from "../authentication/UserContext";
 import api from "../api/apiHandler";
 import { generateArchive } from "../helpers/cloudinary";
 
-export default function Dashboard({ searchResults, setSearchResults, handleSearch, toggleUploadModal, match }) {
+export default function Dashboard({ searchResults, setSearchResults, toggleUploadModal, match }) {
   const [userSelection, setUserSelection] = useState([]);
   const [userFeedback, setUserFeedback] = useState("");
   const userContext = useContext(UserContext);
@@ -20,16 +20,6 @@ export default function Dashboard({ searchResults, setSearchResults, handleSearc
       setActiveCollection(activeCollectionDetails);
     }
   }, [match.params.id]);
-
-  const handleAssetDelete = async (id) => {
-    try {
-      // console.log("You are about to delete the asset ", id);
-      await api.delete("/assets/" + id);
-      setSearchResults(searchResults.filter((el) => el._id !== id));
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const selectAll = () => {
     setUserSelection([...searchResults]);
@@ -148,12 +138,7 @@ export default function Dashboard({ searchResults, setSearchResults, handleSearc
             addToActiveCollection={addToActiveCollection}
             removeFromActiveCollection={removeFromActiveCollection}
           />
-          <AssetList
-            // assets={searchResults}
-            userSelection={userSelection}
-            updateUserSelection={updateUserSelection}
-            handleAssetDelete={handleAssetDelete}
-          />
+          <AssetList userSelection={userSelection} updateUserSelection={updateUserSelection} />
         </div>
       </div>
     </div>

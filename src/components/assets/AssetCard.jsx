@@ -5,7 +5,7 @@ import AssetCardMenu from "./AssetCardMenu";
 import { addToSelection, removeFromSelection } from "../../redux/actions/selection";
 import { connect } from "react-redux";
 
-const AssetCard = ({ asset, isSelected, updateUserSelection, handleTogglePanel, handleAssetDelete, select }) => {
+const AssetCard = ({ asset, isSelected, updateUserSelection, handleTogglePanel, select }) => {
   const [toggleSelect, setToggleSelect] = useState(isSelected);
   const [toggleEditMenu, setToggleEditMenu] = useState(false);
   const handleToggleSelect = () => {
@@ -65,9 +65,7 @@ const AssetCard = ({ asset, isSelected, updateUserSelection, handleTogglePanel, 
             </div>
           </div>
         </div>
-        {toggleEditMenu === true && (
-          <AssetCardMenu asset={asset} handleToggleEditMenu={handleToggleEditMenu} handleTogglePanel={handleTogglePanel} handleAssetDelete={handleAssetDelete} />
-        )}
+        {toggleEditMenu === true && <AssetCardMenu asset={asset} handleToggleEditMenu={handleToggleEditMenu} handleTogglePanel={handleTogglePanel} />}
       </div>
     </>
   );

@@ -1,21 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import api from "../../api/apiHandler";
-import formatBytes from "../../helpers/formatBytes";
-
-// Redux Store
 import { connect } from "react-redux";
 import { searchAssets } from "../../redux/actions/search";
-import { loadAssetFilters } from "../../redux/actions/assets";
-
-const type = [
-  { value: "Product Image", label: "Product Image", meta: "type" },
-  { value: "Video", label: "Video", meta: "type" },
-  { value: "Presentation", label: "Presentation", meta: "type" },
-  { value: "Logo", label: "Logo", meta: "type" },
-  { value: "Font", label: "Font", meta: "type" },
-  { value: "Brand Guideline", label: "Brand Guideline", meta: "type" },
-];
+import { loadAssetFilters, setMetadata, addAsset, updateAsset } from "../../redux/actions/assets";
 
 const customTheme = (theme) => {
   return {
@@ -27,38 +14,13 @@ const customTheme = (theme) => {
   };
 };
 
-const AssetMetadata = ({ cloudinaryData, toggleUploadModal, filters, loadAssetFilters, handleSearch }) => {
+const AddEditMetaData = ({ mode, asset, filters, loadAssetFilters, setMetadata, handleAddAsset, handleUpdateAsset, handleSearch, toggleUploadModal }) => {
   useEffect(() => {
     loadAssetFilters();
   }, []);
 
-  const [assetMetadata, setAssetMetadata] = useState({
-    name: "",
-    type: "",
-    meta_ean13: "",
-    meta_brand: "",
-    meta_recipe: "",
-    meta_flavour: "",
-    meta_packaging: "",
-    meta_capacity: "",
-    meta_format: "",
-    meta_tags: [],
-  });
-
-  useEffect(() => {
-    setAssetMetadata({
-      ...assetMetadata,
-      public_id: cloudinaryData.public_id,
-      secure_url: cloudinaryData.secure_url,
-      meta_file_width: cloudinaryData.width,
-      meta_file_height: cloudinaryData.height,
-      meta_file_extension: cloudinaryData.format,
-      meta_file_bytes: cloudinaryData.bytes,
-    });
-  }, [cloudinaryData]);
-
   const handleInput = (e) => {
-    setAssetMetadata({ ...assetMetadata, [e.target.name]: e.target.value });
+    setMetadata([e.target.name], e.target.value);
   };
 
   const handleSelect = (meta) => {
@@ -66,57 +28,35 @@ const AssetMetadata = ({ cloudinaryData, toggleUploadModal, filters, loadAssetFi
       if (meta === "meta_tags") {
         selectedOptions.value = selectedOptions.map((el) => el.value);
       }
-      setAssetMetadata({ ...assetMetadata, [meta]: selectedOptions.value });
+      setMetadata([meta], selectedOptions.value);
     };
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/assets", assetMetadata);
-      handleSearch();
-      toggleUploadModal();
+      if (mode === "edit") {
+        handleUpdateAsset(asset._id, asset);
+        toggleUploadModal();
+      } else {
+        handleAddAsset(asset);
+        handleSearch();
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const setAspectRatioClass = (width, height) => {
-    if (width > height) return "landscape";
-    return "portrait";
-  };
-
   return (
     <form onSubmit={handleSubmit} id="new-asset-metadata">
       <div className="row">
-        <div className="col-4 d-flex flex-column justify-content-center align-items-center">
-          {cloudinaryData.bytes && (
-            <React.Fragment>
-              <img
-                src={cloudinaryData.secure_url.replace("/image/upload/", "/image/upload/h_300/")}
-                alt=""
-                className={"upload-" + setAspectRatioClass(cloudinaryData.width, cloudinaryData.height)}
-              />
-              <div className="small text-muted">
-                <small className="d-block">
-                  File details: .{cloudinaryData.format}, {cloudinaryData.width}x{cloudinaryData.height} pixels, {formatBytes(cloudinaryData.bytes)}
-                </small>
-                <small className="d-block">
-                  Fill in additional data to make it searchable.
-                  <br />
-                  Don't worry, you'll be able to edit this later as well.
-                </small>
-              </div>
-            </React.Fragment>
-          )}
-        </div>
-        <div className="col-4">
+        <div className="col-6">
           <div className="form-group row">
             <label htmlFor="type" className="col-sm-2 col-form-label col-form-label-sm">
               Type
             </label>
             <div className="col-sm-10">
-              <Select options={type} onChange={handleSelect("type")} name="type" id="brand" classNamePrefix="react-select" theme={customTheme} />
+              {/* <Select options={type} onChange={handleSelect("type")} name="type" id="brand" classNamePrefix="react-select" theme={customTheme} /> */}
             </div>
           </div>
           <div className="form-group row">
@@ -129,7 +69,7 @@ const AssetMetadata = ({ cloudinaryData, toggleUploadModal, filters, loadAssetFi
                 name="name"
                 className="form-control form-control-sm"
                 id="name"
-                value={assetMetadata.name}
+                value={asset.name}
                 onChange={handleInput}
                 placeholder="Enter a descriptive name..."
               />
@@ -160,7 +100,7 @@ const AssetMetadata = ({ cloudinaryData, toggleUploadModal, filters, loadAssetFi
             </div>
           </div>
         </div>
-        <div className="col-4">
+        <div className="col-6">
           <div className="form-group row">
             <label htmlFor="packaging" className="col-sm-3 col-form-label col-form-label-sm">
               Packaging
@@ -204,7 +144,7 @@ const AssetMetadata = ({ cloudinaryData, toggleUploadModal, filters, loadAssetFi
                 placeholder="#############"
                 className="form-control form-control-sm"
                 id="meta_ean"
-                value={assetMetadata.meta_ean13}
+                value={asset.meta_ean13}
                 onChange={handleInput}
               />
             </div>
@@ -230,6 +170,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   handleSearch: (url) => dispatch(searchAssets(url)),
   loadAssetFilters: () => dispatch(loadAssetFilters()),
+  setMetadata: (field, value) => dispatch(setMetadata(field, value)),
+  handleAddAsset: (asset) => dispatch(addAsset(asset)),
+  handleUpdateAsset: (id, asset) => dispatch(updateAsset(id, asset)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AssetMetadata);
+export default connect(mapStateToProps, mapDispatchToProps)(AddEditMetaData);

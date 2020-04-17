@@ -6,7 +6,9 @@ import { connect } from "react-redux";
 import { addAllToSelection, removeAllFromSelection } from "../../redux/actions/selection";
 
 const AssetToolbar = ({
-  userSelection,
+  selection,
+  assets,
+  match,
   selectAll,
   clearAll,
   shareSelection,
@@ -15,8 +17,6 @@ const AssetToolbar = ({
   refreshActiveCollection,
   addToActiveCollection,
   removeFromActiveCollection,
-  match,
-  assets,
 }) => {
   const userContext = useContext(UserContext);
   const { currentUser } = userContext;
@@ -67,16 +67,16 @@ const AssetToolbar = ({
           </li>
           <li className="no-link">
             <FontAwesomeIcon icon="check-circle" />
-            <span>{userSelection.length} Selected</span>
+            <span>{selection.length} Selected</span>
           </li>
         </ul>
         {activeCollection && match.params.id ? (
           <ul>
-            <li className={!userSelection.length ? "inactive-link" : undefined} onClick={userSelection.length ? () => addToActiveCollection(userSelection) : undefined}>
+            <li className={!selection.length ? "inactive-link" : undefined} onClick={selection.length ? () => addToActiveCollection(selection) : undefined}>
               <FontAwesomeIcon icon="folder-plus" />
               <span>Add Selection to Collection</span>
             </li>
-            <li className={!userSelection.length ? "inactive-link" : undefined} onClick={userSelection.length ? () => removeFromActiveCollection(userSelection) : undefined}>
+            <li className={!selection.length ? "inactive-link" : undefined} onClick={selection.length ? () => removeFromActiveCollection(selection) : undefined}>
               <FontAwesomeIcon icon="folder-minus" />
               <span>Remove Selection from Collection</span>
             </li>
@@ -84,26 +84,26 @@ const AssetToolbar = ({
         ) : (
           <React.Fragment>
             <ul className="flex-xl-fill justify-content-xl-end">
-              <li onClick={userSelection.length ? () => shareSelection("create") : undefined} className={!userSelection.length ? "inactive-link" : undefined}>
+              <li onClick={selection.length ? () => shareSelection("create") : undefined} className={!selection.length ? "inactive-link" : undefined}>
                 <FontAwesomeIcon icon="download" />
                 <span>Download Archive</span>
               </li>
-              <li onClick={userSelection.length ? () => shareSelection("download") : undefined} className={!userSelection.length ? "inactive-link" : undefined}>
+              <li onClick={selection.length ? () => shareSelection("download") : undefined} className={!selection.length ? "inactive-link" : undefined}>
                 <FontAwesomeIcon icon={["far", "file-archive"]} />
                 <span>Get Shareable URL</span>
               </li>
-              {/* <li className={!userSelection.length ? "inactive-link" : undefined}>
+              {/* <li className={!selection.length ? "inactive-link" : undefined}>
                 <FontAwesomeIcon icon="folder-plus" />
                 <span>Add to Collection</span>
               </li> */}
             </ul>
             {currentUser && currentUser.role !== "user" && (
               <ul>
-                <li className={!userSelection.length ? "inactive-link" : undefined}>
+                <li className={!selection.length ? "inactive-link" : undefined}>
                   <FontAwesomeIcon icon="edit" />
                   <span>Bulk Edit</span>
                 </li>
-                <li className={!userSelection.length ? "inactive-link" : undefined}>
+                <li className={!selection.length ? "inactive-link" : undefined}>
                   <FontAwesomeIcon icon="trash-alt" />
                   <span>Delete</span>
                 </li>
@@ -116,13 +116,10 @@ const AssetToolbar = ({
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    assets: state.assets,
-    selection: state.selection,
-    search: state.search,
-  };
-};
+const mapStateToProps = (state) => ({
+  assets: state.search.results,
+  selection: state.selection,
+});
 
 const mapDispatchToProps = (dispatch) => {
   return {

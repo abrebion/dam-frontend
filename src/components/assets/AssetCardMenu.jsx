@@ -3,8 +3,11 @@ import { useWindowDimensions } from "../../helpers/useWindowDimensions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UserContext from "../../authentication/UserContext";
 import "@github/clipboard-copy-element";
+// Redux Store
+import { connect } from "react-redux";
+import { setCurrentAsset, deleteAsset } from "../../redux/actions/assets";
 
-export default function AssetCardMenu({ asset, handleToggleEditMenu, handleTogglePanel, handleAssetDelete }) {
+const AssetCardMenu = ({ asset, handleToggleEditMenu, handleTogglePanel, setCurrentAsset, handleDelete }) => {
   const menu = useRef(null);
   const { width: windowWidth } = useWindowDimensions();
   const [menuClass, setMenuClass] = useState("");
@@ -13,7 +16,6 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
 
   useEffect(() => {
     if (menu.current.getBoundingClientRect().right > windowWidth) {
-      //   console.log(menu.current.getBoundingClientRect().right);
       setMenuClass("offset");
     }
     document.addEventListener("mousedown", handleClick, false);
@@ -23,7 +25,7 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
     };
   });
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     if (menu.current.contains(e.target)) {
       return;
     }
@@ -31,8 +33,8 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
   };
 
   const downloadImage = async (url, name) => {
-    let blob = await fetch(url).then(r => r.blob());
-    let dataUrl = await new Promise(resolve => {
+    let blob = await fetch(url).then((r) => r.blob());
+    let dataUrl = await new Promise((resolve) => {
       let reader = new FileReader();
       reader.onload = () => resolve(reader.result);
       reader.readAsDataURL(blob);
@@ -46,7 +48,7 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
     document.body.removeChild(link);
   };
 
-  const createImage = options => {
+  const createImage = (options) => {
     options = options || {};
     const img = document.createElement("img");
     if (options.src) {
@@ -55,13 +57,13 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
     return img;
   };
 
-  const copyToClipboard = async pngBlob => {
+  const copyToClipboard = async (pngBlob) => {
     try {
       await navigator.clipboard.write([
         // eslint-disable-next-line no-undef
         new ClipboardItem({
-          [pngBlob.type]: pngBlob
-        })
+          [pngBlob.type]: pngBlob,
+        }),
       ]);
       console.log("Image copied");
     } catch (error) {
@@ -69,11 +71,11 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
     }
   };
 
-  const convertToPng = imgBlob => {
+  const convertToPng = (imgBlob) => {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     const imageEl = createImage({ src: window.URL.createObjectURL(imgBlob) });
-    imageEl.onload = e => {
+    imageEl.onload = (e) => {
       canvas.width = e.target.width;
       canvas.height = e.target.height;
       ctx.drawImage(e.target, 0, 0, e.target.width, e.target.height);
@@ -81,7 +83,7 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
     };
   };
 
-  const copyImageToClipbaord = async src => {
+  const copyImageToClipbaord = async (src) => {
     const img = await fetch(src);
     const imgBlob = await img.blob();
     const extension = src.split(".").pop();
@@ -98,7 +100,12 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
   return (
     <div className={"card-menu text-muted " + menuClass} ref={menu}>
       {currentUser.role !== "user" ? (
-        <span onClick={() => handleTogglePanel(asset)}>
+        <span
+          onClick={() => {
+            setCurrentAsset(asset);
+            handleTogglePanel(asset);
+          }}
+        >
           <FontAwesomeIcon icon="edit" />
           Edit
         </span>
@@ -135,11 +142,18 @@ export default function AssetCardMenu({ asset, handleToggleEditMenu, handleToggl
         Add to Collection
       </span> */}
       {currentUser.role !== "user" && (
-        <span onClick={() => handleAssetDelete(asset._id)}>
+        <span onClick={() => handleDelete(asset._id)}>
           <FontAwesomeIcon icon="trash-alt" />
           Delete
         </span>
       )}
     </div>
   );
-}
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  handleDelete: (id) => dispatch(deleteAsset(id)),
+  setCurrentAsset: (asset) => dispatch(setCurrentAsset(asset)),
+});
+
+export default connect(null, mapDispatchToProps)(AssetCardMenu);

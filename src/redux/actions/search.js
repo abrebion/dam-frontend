@@ -1,9 +1,9 @@
-import { SEARCH_INITIATE, SEARCH_COMPLETE, SEARCH_FAILURE, SEARCH_RESET } from "../actionTypes";
+import { SEARCH_INITIATE, SEARCH_COMPLETE, SEARCH_FAILURE, SEARCH_REFRESH, SEARCH_RESET } from "../actionTypes";
 import api from "../../api/apiHandler";
 
 const defaultURL = "/assets/search?sort=-createdAt";
 
-export const search = (searchURL = defaultURL) => {
+export const searchAssets = (searchURL = defaultURL) => {
   return async (dispatch) => {
     dispatch(searchInitiated());
     try {
@@ -28,6 +28,11 @@ const searchCompleted = (data) => ({
 const searchFailure = (error) => ({
   type: SEARCH_FAILURE,
   error,
+});
+
+export const searchRefresh = (id) => ({
+  type: SEARCH_REFRESH,
+  id,
 });
 
 export const searchReset = () => ({

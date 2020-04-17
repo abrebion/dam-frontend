@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import AssetMetadata from "./AssetMetadata";
 
-const getColor = props => {
+const getColor = (props) => {
   if (props.isDragAccept) {
     return "#4a903c";
   }
@@ -28,10 +28,10 @@ const Container = styled.div`
   padding: 40px;
   border-width: 2px;
   border-radius: 2px;
-  border-color: ${props => getColor(props)};
+  border-color: ${(props) => getColor(props)};
   border-style: dashed;
   background-color: #fafafa;
-  color: ${props => getColor(props)};
+  color: ${(props) => getColor(props)};
   outline: none;
   transition: all 0.24s ease-in-out;
   cursor: pointer;
@@ -45,9 +45,9 @@ export default function AssetUploader({ mode, toggleSaveButton, toggleUploadModa
   const [asset, setAsset] = useState({});
 
   const onDrop = useCallback(
-    acceptedFiles => {
+    (acceptedFiles) => {
       // Upload file to Cloudinary using XHR and a direct call to the Cloudinary API
-      const uploaders = acceptedFiles.map(file => {
+      const uploaders = acceptedFiles.map((file) => {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("upload_preset", process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET);
@@ -55,9 +55,9 @@ export default function AssetUploader({ mode, toggleSaveButton, toggleUploadModa
         formData.append("timestamp", Date.now());
         return axios
           .post(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`, formData, {
-            headers: { "X-Requested-With": "XMLHttpRequest" }
+            headers: { "X-Requested-With": "XMLHttpRequest" },
           })
-          .then(response => {
+          .then((response) => {
             setAsset({ ...response.data });
           });
       });
@@ -79,9 +79,7 @@ export default function AssetUploader({ mode, toggleSaveButton, toggleUploadModa
           <p className="mt-3 upload-text">Drag 'n' drop a file here, or click to select one</p>
         </Container>
       )}
-      {acceptedFiles.length > 0 && mode === "add" && (
-        <AssetMetadata cloudinaryData={asset} toggleUploadModal={toggleUploadModal} handleSearch={handleSearch} searchResults={searchResults} setSearchResults={setSearchResults} />
-      )}
+      {acceptedFiles.length > 0 && mode === "add" && <AssetMetadata cloudinaryData={asset} toggleUploadModal={toggleUploadModal} />}
     </div>
   );
 }

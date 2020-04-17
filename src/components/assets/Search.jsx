@@ -6,49 +6,10 @@ import api from "../../api/apiHandler";
 import qs from "query-string";
 // Redux Store
 import { connect } from "react-redux";
-import { search } from "../../redux/actions/search";
+import { searchAssets } from "../../redux/actions/search";
+import { loadAssetFilters } from "../../redux/actions/assets";
 
 const animatedComponents = makeAnimated();
-
-const meta_brand = [
-  { value: "Schweppes", label: "Schweppes", meta: "meta_brand" },
-  { value: "Orangina", label: "Orangina", meta: "meta_brand" },
-  { value: "Oasis", label: "Oasis", meta: "meta_brand" },
-  { value: "Oasis O'Verger", label: "Oasis O'Verger", meta: "meta_brand" },
-  { value: "MayTea", label: "MayTea", meta: "meta_brand" },
-  { value: "Pulco", label: "Pulco", meta: "meta_brand" },
-  { value: "Champomy", label: "Champomy", meta: "meta_brand" },
-  { value: "Gini", label: "Gini", meta: "meta_brand" },
-  { value: "Canada Dry", label: "Canada Dry", meta: "meta_brand" },
-  { value: "Pampryl", label: "Pampryl", meta: "meta_brand" },
-  { value: "Ricqlès", label: "Ricqlès", meta: "meta_brand" },
-  { value: "Brut de Pomme", label: "Brut de Pomme", meta: "meta_brand" },
-  { value: "Banga", label: "Banga", meta: "meta_brand" },
-];
-
-const meta_capacity = [
-  { value: "2l", label: "2l", meta: "meta_capacity" },
-  { value: "1.5l", label: "1.5l", meta: "meta_capacity" },
-  { value: "1l", label: "1l", meta: "meta_capacity" },
-  { value: "75cl", label: "75cl", meta: "meta_capacity" },
-  { value: "50cl", label: "50cl", meta: "meta_capacity" },
-  { value: "33cl", label: "33cl", meta: "meta_capacity" },
-  { value: "25cl", label: "25cl", meta: "meta_capacity" },
-  { value: "20cl", label: "20cl", meta: "meta_capacity" },
-  { value: "15cl", label: "15cl", meta: "meta_capacity" },
-];
-
-const meta_packaging = [
-  { value: "PET", label: "PET", meta: "meta_packaging" },
-  { value: "CAN", label: "CAN", meta: "meta_packaging" },
-  { value: "VERRE", label: "VERRE", meta: "meta_packaging" },
-];
-
-const meta_format = [
-  { value: "Standard", label: "Standard", meta: "meta_format" },
-  { value: "Lot Gratuité", label: "Lot Gratuité", meta: "meta_format" },
-  { value: "Lot Physique", label: "Lot Physique", meta: "meta_format" },
-];
 
 const customTheme = (theme) => {
   return {
@@ -63,13 +24,9 @@ const customTheme = (theme) => {
   };
 };
 
-const Search = ({ handleSearch }) => {
-  const [nameSelect, setNameSelect] = useState("");
-  const [recipes, setRecipes] = useState([]);
-  const [flavours, setFlavours] = useState([]);
-  const [eans, setEANs] = useState([]);
-  const [tags, setTags] = useState([]);
+const Search = ({ filters, loadAssetFilters, handleSearch }) => {
   const [searchQuery, setSearchQuery] = useState({});
+  const [nameSelect, setNameSelect] = useState("");
   const [brandSelect, setBrandSelect] = useState([]);
   const [recipeSelect, setRecipeSelect] = useState([]);
   const [flavourSelect, setFlavourSelect] = useState([]);
@@ -78,11 +35,17 @@ const Search = ({ handleSearch }) => {
   const [formatSelect, setFormatSelect] = useState([]);
   const [tagsSelect, setTagsSelect] = useState([]);
   const [eanSelect, setEanSelect] = useState([]);
-  // const [initialView, setInitialView] = useState(true);
+
+  useEffect(() => {
+    loadAssetFilters();
+  }, []);
+
+  useEffect(() => {
+    if (searchQuery) handleSearch("/assets/search?sort=-createdAt&" + qs.stringify(searchQuery, { arrayFormat: "comma", skipNull: true }));
+  }, [searchQuery]);
 
   const refreshResults = (meta) => {
     return (selectedOptions) => {
-      // console.log("Meta:", meta, ">>>>", selectedOptions);
       switch (meta) {
         case "name":
           if (selectedOptions) setNameSelect(selectedOptions.name);
@@ -132,7 +95,6 @@ const Search = ({ handleSearch }) => {
         return;
       }
       setSearchQuery({ ...searchQuery, [selectedOptions[0].meta]: selectedOptions.map((el) => el.value) });
-      // setInitialView(false);
     };
   };
 
@@ -143,67 +105,11 @@ const Search = ({ handleSearch }) => {
         return { value: el.name, label: el.name, meta: "name" };
       });
       const filteredNames = returnedNames.filter((el) => el.label.match(new RegExp(inputValue, "gi")));
-      // console.log(filteredNames);
       callback(filteredNames);
     } catch (error) {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    if (searchQuery) handleSearch("/assets/search?sort=-createdAt&" + qs.stringify(searchQuery, { arrayFormat: "comma", skipNull: true }));
-  }, [searchQuery]);
-
-  useEffect(() => {
-    async function fetchTags() {
-      try {
-        const fetchedTags = await api.get("/tags");
-        const tags = fetchedTags.data.map((el) => {
-          return { value: el._id, label: el.name, meta: "meta_tags" };
-        });
-        setTags(tags);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    async function fetchRecipes() {
-      try {
-        const fetchedRecipes = await api.get("/assets/recipes");
-        const recipes = fetchedRecipes.data.map((el) => {
-          return { value: el, label: el, meta: "meta_recipe" };
-        });
-        setRecipes(recipes);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    async function fetchFlavours() {
-      try {
-        const fetchedFlavours = await api.get("/assets/flavours");
-        const flavours = fetchedFlavours.data.map((el) => {
-          return { value: el, label: el, meta: "meta_flavour" };
-        });
-        setFlavours(flavours);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    async function fetchEANs() {
-      try {
-        const fetchedEANs = await api.get("/assets/eans");
-        const eans = fetchedEANs.data.map((el) => {
-          return { value: el, label: el, meta: "meta_ean13" };
-        });
-        setEANs(eans);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchTags();
-    fetchRecipes();
-    fetchFlavours();
-    fetchEANs();
-  }, []);
 
   const handleNameChange = (newValue) => {
     setNameSelect({ newValue });
@@ -255,7 +161,7 @@ const Search = ({ handleSearch }) => {
           Brand
         </label>
         <Select
-          options={meta_brand}
+          options={filters.meta_brand}
           isMulti
           onChange={refreshResults("meta_brand")}
           noOptionsMessage={() => "Sorry, there are no results..."}
@@ -271,9 +177,8 @@ const Search = ({ handleSearch }) => {
         <label htmlFor="Recipe" className="small">
           Recipe
         </label>
-
         <Select
-          options={recipes}
+          options={filters.meta_recipe}
           isMulti
           onChange={refreshResults("meta_recipe")}
           noOptionsMessage={() => "Sorry, there are no results..."}
@@ -289,9 +194,8 @@ const Search = ({ handleSearch }) => {
         <label htmlFor="flavour" className="small">
           Flavour
         </label>
-
         <Select
-          options={flavours}
+          options={filters.meta_flavour}
           isMulti
           onChange={refreshResults("meta_flavour")}
           noOptionsMessage={() => "Sorry, there are no results..."}
@@ -307,9 +211,8 @@ const Search = ({ handleSearch }) => {
         <label htmlFor="capacity" className="small">
           Capacity
         </label>
-
         <Select
-          options={meta_capacity}
+          options={filters.meta_capacity}
           isMulti
           onChange={refreshResults("meta_capacity")}
           noOptionsMessage={() => "Sorry, there are no results..."}
@@ -318,16 +221,15 @@ const Search = ({ handleSearch }) => {
           components={animatedComponents}
           classNamePrefix="react-select"
           theme={customTheme}
-          value={capacitySelect}
+          value={packagingSelect}
         />
       </div>
       <div className="form-group">
         <label htmlFor="packaging" className="small">
           Packaging
         </label>
-
         <Select
-          options={meta_packaging}
+          options={filters.meta_packaging}
           isMulti
           onChange={refreshResults("meta_packaging")}
           noOptionsMessage={() => "Sorry, there are no results..."}
@@ -336,16 +238,15 @@ const Search = ({ handleSearch }) => {
           components={animatedComponents}
           classNamePrefix="react-select"
           theme={customTheme}
-          value={packagingSelect}
+          value={capacitySelect}
         />
       </div>
       <div className="form-group">
         <label htmlFor="format" className="small">
           Format
         </label>
-
         <Select
-          options={meta_format}
+          options={filters.meta_format}
           isMulti
           onChange={refreshResults("meta_format")}
           noOptionsMessage={() => "Sorry, there are no results..."}
@@ -361,9 +262,8 @@ const Search = ({ handleSearch }) => {
         <label htmlFor="tags" className="small">
           Tags
         </label>
-
         <Select
-          options={tags}
+          options={filters.meta_tags}
           isMulti
           onChange={refreshResults("meta_tags")}
           noOptionsMessage={() => "Sorry, there are no results..."}
@@ -379,9 +279,8 @@ const Search = ({ handleSearch }) => {
         <label htmlFor="ean" className="small">
           EAN
         </label>
-
         <Select
-          options={eans}
+          options={filters.meta_ean}
           isMulti
           onChange={refreshResults("meta_ean13")}
           noOptionsMessage={() => "Sorry, there are no results..."}
@@ -402,17 +301,13 @@ const Search = ({ handleSearch }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    searchResults: state.search.results,
-    searchLoading: state.search.loading,
-  };
-};
+const mapStateToProps = (state) => ({
+  filters: state.assets.filters,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    handleSearch: (url) => dispatch(search(url)),
-  };
-};
+const mapDispatchToProps = (dispatch) => ({
+  handleSearch: (url) => dispatch(searchAssets(url)),
+  loadAssetFilters: () => dispatch(loadAssetFilters()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search);
